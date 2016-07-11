@@ -10,12 +10,14 @@ import Redirect from 'react-router/lib/Redirect';
 import Login from './container/login';
 import App from './container/app';
 import Index from './container/index';
+import Device from './container/device';
 
 import '../static/css/style.css';
 
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/login" component={Login} />
+		<Route path="/device" component={Device} />
 		<Route path="/" component={App}>
 			<IndexRoute component={Index}/>
 			<Redirect from="*" to="/" />

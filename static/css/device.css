@@ -1,0 +1,20 @@
+#alert-deviceID {
+	text-align: center;
+	margin-top: 50px;
+}
+#alert-deviceID #idWrap {
+	font-size: 18px;
+	color: blue;
+}
+#streamWrap.live {
+	position: absolute;
+	top: 2%;
+	left: 2%;
+	width: 96%;
+    height: 96%;
+}
+#streamWrap video {
+	height: 99%;
+	width: 100%;
+	object-fit: fill;
+}

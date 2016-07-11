@@ -8,7 +8,6 @@ import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
-import Checkbox from 'react-bootstrap/lib/Checkbox';
 
 import '../../static/css/login.css';
 
@@ -21,7 +20,7 @@ export default class Login extends React.Component {
 		var user = ReactDOM.findDOMNode(this.loginUser).value;
 		var pass = ReactDOM.findDOMNode(this.loginPass).value;
 		if(user) {
-			window.localStorage.WebRTCExampleUser = user;
+			// window.localStorage.WebRTCExampleUser = user;
 			this.context.router.replace('/');
 		} 
 	}
