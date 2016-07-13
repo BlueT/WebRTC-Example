@@ -20,7 +20,7 @@ export default class Login extends React.Component {
 		var user = ReactDOM.findDOMNode(this.loginUser).value;
 		var pass = ReactDOM.findDOMNode(this.loginPass).value;
 		if(user) {
-			// window.localStorage.WebRTCExampleUser = user;
+			window.localStorage.webrtcExampleUser = user;
 			this.context.router.replace('/');
 		} 
 	}
