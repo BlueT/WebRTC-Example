@@ -1,7 +1,7 @@
 import React from 'react';
+import Grid from 'react-bootstrap/lib/Grid';
 
 import Navigation from '../component/navigation';
-
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -21,7 +21,9 @@ export default class App extends React.Component {
 		return (
 			<div>
 				<Navigation user={localStorage.webrtcExampleUser} onLogout={this.handleLogout} />
-				{this.props.children}
+				<Grid>
+					{this.props.children}
+				</Grid>
 			</div>
 		);
 	}
