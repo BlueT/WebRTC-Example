@@ -14,6 +14,7 @@ export default class DeviceCreator extends React.Component {
 		var id = ReactDOM.findDOMNode(this.newDevice).value;
 		if(id) {
 			this.props.onAdd(id);
+			ReactDOM.findDOMNode(this.newDevice).value = '';
 		}
 	}
 	render() {
@@ -21,8 +22,8 @@ export default class DeviceCreator extends React.Component {
 			<FormGroup>
 				<InputGroup>
 					<FormControl type="text" placeholder="新增裝置" ref={ref => this.newDevice = ref} />
-					<InputGroup.Addon>
-						<Glyphicon glyph="plus" onClick={this.handleClick} />
+					<InputGroup.Addon onClick={this.handleClick} >
+						<Glyphicon glyph="plus" />
 					</InputGroup.Addon>
 				</InputGroup>
 			</FormGroup>
