@@ -8,9 +8,11 @@ export default class App extends React.Component {
 		super(props);
 		this.handleLogout = this.handleLogout.bind(this);
 	}
-	componentDidMount() {
+	componentWillMount() {
 		if(!localStorage.webrtcExampleUser) {
+			console.log('No login.');
 			this.context.router.replace('/login');
+			return;
 		}
 	}
 	handleLogout() {

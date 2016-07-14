@@ -16,7 +16,9 @@ export default class Index extends React.Component {
 		this.handleAddDevice = this.handleAddDevice.bind(this);
 	}
 	componentDidMount() {
-		this.getDeviceList();
+		if(!this.getDeviceList()) {
+			return;
+		}
 
 		var _this = this;
 		var phone = window.phone = PHONE({
@@ -47,12 +49,18 @@ export default class Index extends React.Component {
 		}
 
 		function ended(session) {
+			_this.setState({
+				live: false
+			});
 			document.getElementById('streamWrap').innerHTML = '';
 			console.log("Call end.");
 		}
 	}
 	getDeviceList() {
 		let user = localStorage.webrtcExampleUser;
+		if(!user) {
+			return false;
+		}
 		let deviceList; 
 		if(localStorage.webrtcExampleDeviceList) {
 			if(JSON.parse(localStorage.webrtcExampleDeviceList)[user]) {
