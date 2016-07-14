@@ -15,6 +15,7 @@ export default class Index extends React.Component {
 		}
 		this.getDeviceList = this.getDeviceList.bind(this);
 		this.handleAddDevice = this.handleAddDevice.bind(this);
+		this.handleHangup = this.handleHangup.bind(this);
 	}
 	componentDidMount() {
 		if(!this.getDeviceList()) {
@@ -85,6 +86,9 @@ export default class Index extends React.Component {
 		localStorage.webrtcExampleDeviceList = JSON.stringify(Object.assign(JSON.parse(localStorage.webrtcExampleDeviceList), {[user]: deviceList}));
 		this.getDeviceList();
 	}
+	handleHangup() {
+		phone.hangup();
+	}
 	render() {
 		return (
 			<div>
@@ -104,6 +108,7 @@ export default class Index extends React.Component {
 						<Glyphicon 
 							className="btn-hangup" 
 							glyph="phone-alt"
+							onClick={this.handleHangup}
 						/>
 					</div>
 				</Row>
