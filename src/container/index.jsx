@@ -98,17 +98,21 @@ export default class Index extends React.Component {
 					</Col>
 				</Row>
 				<Row>
-					<Col md={6} mdOffset={3}>
+					<Col 
+						id="listWrap" 
+						md={6} 
+						mdOffset={3}
+						style={{maxHeight: '600px', overflow: 'auto'}}
+					>
 						<DeviceList list={this.state.deviceList} />
 					</Col>
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={8} mdOffset={2}></Col>
-					<div id="hangup">
+					<div id="hangup" onClick={this.handleHangup}>
 						<Glyphicon 
 							className="btn-hangup" 
 							glyph="phone-alt"
-							onClick={this.handleHangup}
 						/>
 					</div>
 				</Row>
