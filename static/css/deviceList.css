@@ -1,0 +1,4 @@
+#deviceList .deviceItem:hover .btn-call {
+	color: green;
+	cursor: pointer;
+}

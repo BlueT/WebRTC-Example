@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
@@ -14,9 +15,12 @@ export default class Index extends React.Component {
 		}
 		this.getDeviceList = this.getDeviceList.bind(this);
 		this.handleAddDevice = this.handleAddDevice.bind(this);
+		this.handleHangup = this.handleHangup.bind(this);
 	}
 	componentDidMount() {
-		this.getDeviceList();
+		if(!this.getDeviceList()) {
+			return;
+		}
 
 		var _this = this;
 		var phone = window.phone = PHONE({
@@ -47,12 +51,18 @@ export default class Index extends React.Component {
 		}
 
 		function ended(session) {
+			_this.setState({
+				live: false
+			});
 			document.getElementById('streamWrap').innerHTML = '';
 			console.log("Call end.");
 		}
 	}
 	getDeviceList() {
 		let user = localStorage.webrtcExampleUser;
+		if(!user) {
+			return false;
+		}
 		let deviceList; 
 		if(localStorage.webrtcExampleDeviceList) {
 			if(JSON.parse(localStorage.webrtcExampleDeviceList)[user]) {
@@ -68,12 +78,16 @@ export default class Index extends React.Component {
 		this.setState({
 			deviceList
 		});
+		return true;
 	}
 	handleAddDevice(deviceID) {
 		let user = localStorage.webrtcExampleUser;
 		let deviceList = [...JSON.parse(localStorage.webrtcExampleDeviceList)[user], deviceID]
 		localStorage.webrtcExampleDeviceList = JSON.stringify(Object.assign(JSON.parse(localStorage.webrtcExampleDeviceList), {[user]: deviceList}));
 		this.getDeviceList();
+	}
+	handleHangup() {
+		phone.hangup();
 	}
 	render() {
 		return (
@@ -84,12 +98,23 @@ export default class Index extends React.Component {
 					</Col>
 				</Row>
 				<Row>
-					<Col md={8} mdOffset={2}>
+					<Col 
+						id="listWrap" 
+						md={6} 
+						mdOffset={3}
+						style={{maxHeight: '600px', overflow: 'auto'}}
+					>
 						<DeviceList list={this.state.deviceList} />
 					</Col>
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={8} mdOffset={2}></Col>
+					<div id="hangup" onClick={this.handleHangup}>
+						<Glyphicon 
+							className="btn-hangup" 
+							glyph="phone-alt"
+						/>
+					</div>
 				</Row>
 			</div>
 		)
