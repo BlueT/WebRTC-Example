@@ -76,6 +76,7 @@ export default class Index extends React.Component {
 		this.setState({
 			deviceList
 		});
+		return true;
 	}
 	handleAddDevice(deviceID) {
 		let user = localStorage.webrtcExampleUser;
@@ -92,7 +93,7 @@ export default class Index extends React.Component {
 					</Col>
 				</Row>
 				<Row>
-					<Col md={8} mdOffset={2}>
+					<Col md={6} mdOffset={3}>
 						<DeviceList list={this.state.deviceList} />
 					</Col>
 				</Row>
