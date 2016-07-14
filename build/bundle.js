@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b02fa935d451d7242a42"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "24e9ba84212d583bf6e2"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -625,11 +625,11 @@
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _device = __webpack_require__(408);
+	var _device = __webpack_require__(410);
 	
 	var _device2 = _interopRequireDefault(_device);
 	
-	__webpack_require__(412);
+	__webpack_require__(414);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -30457,10 +30457,12 @@
 		}
 	
 		(0, _createClass3.default)(App, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
+			key: 'componentWillMount',
+			value: function componentWillMount() {
 				if (!localStorage.webrtcExampleUser) {
+					console.log('No login.');
 					this.context.router.replace('/login');
+					return;
 				}
 			}
 		}, {
@@ -32175,6 +32177,10 @@
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
+	var _Glyphicon = __webpack_require__(360);
+	
+	var _Glyphicon2 = _interopRequireDefault(_Glyphicon);
+	
 	var _deviceCreator = __webpack_require__(401);
 	
 	var _deviceCreator2 = _interopRequireDefault(_deviceCreator);
@@ -32199,13 +32205,16 @@
 			};
 			_this2.getDeviceList = _this2.getDeviceList.bind(_this2);
 			_this2.handleAddDevice = _this2.handleAddDevice.bind(_this2);
+			_this2.handleHangup = _this2.handleHangup.bind(_this2);
 			return _this2;
 		}
 	
 		(0, _createClass3.default)(Index, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				this.getDeviceList();
+				if (!this.getDeviceList()) {
+					return;
+				}
 	
 				var _this = this;
 				var phone = window.phone = PHONE({
@@ -32236,6 +32245,9 @@
 				}
 	
 				function ended(session) {
+					_this.setState({
+						live: false
+					});
 					document.getElementById('streamWrap').innerHTML = '';
 					console.log("Call end.");
 				}
@@ -32244,6 +32256,9 @@
 			key: 'getDeviceList',
 			value: function getDeviceList() {
 				var user = localStorage.webrtcExampleUser;
+				if (!user) {
+					return false;
+				}
 				var deviceList = void 0;
 				if (localStorage.webrtcExampleDeviceList) {
 					if (JSON.parse(localStorage.webrtcExampleDeviceList)[user]) {
@@ -32259,6 +32274,7 @@
 				this.setState({
 					deviceList: deviceList
 				});
+				return true;
 			}
 		}, {
 			key: 'handleAddDevice',
@@ -32267,6 +32283,11 @@
 				var deviceList = [].concat((0, _toConsumableArray3.default)(JSON.parse(localStorage.webrtcExampleDeviceList)[user]), [deviceID]);
 				localStorage.webrtcExampleDeviceList = (0, _stringify2.default)((0, _assign2.default)(JSON.parse(localStorage.webrtcExampleDeviceList), (0, _defineProperty3.default)({}, user, deviceList)));
 				this.getDeviceList();
+			}
+		}, {
+			key: 'handleHangup',
+			value: function handleHangup() {
+				phone.hangup();
 			}
 		}, {
 			key: 'render',
@@ -32288,14 +32309,27 @@
 						null,
 						_react2.default.createElement(
 							_Col2.default,
-							{ md: 8, mdOffset: 2 },
+							{
+								id: 'listWrap',
+								md: 6,
+								mdOffset: 3,
+								style: { maxHeight: '600px', overflow: 'auto' }
+							},
 							_react2.default.createElement(_deviceList2.default, { list: this.state.deviceList })
 						)
 					),
 					_react2.default.createElement(
 						_Row2.default,
 						null,
-						_react2.default.createElement(_Col2.default, { id: 'streamWrap', className: this.state.live ? 'live' : '', md: 8, mdOffset: 2 })
+						_react2.default.createElement(_Col2.default, { id: 'streamWrap', className: this.state.live ? 'live' : '', md: 8, mdOffset: 2 }),
+						_react2.default.createElement(
+							'div',
+							{ id: 'hangup', onClick: this.handleHangup },
+							_react2.default.createElement(_Glyphicon2.default, {
+								className: 'btn-hangup',
+								glyph: 'phone-alt'
+							})
+						)
 					)
 				);
 			}
@@ -32932,6 +32966,12 @@
 	
 	var _ListGroupItem2 = _interopRequireDefault(_ListGroupItem);
 	
+	var _Glyphicon = __webpack_require__(360);
+	
+	var _Glyphicon2 = _interopRequireDefault(_Glyphicon);
+	
+	__webpack_require__(408);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var DeviceList = function (_React$Component) {
@@ -32958,14 +32998,19 @@
 	
 				return _react2.default.createElement(
 					_ListGroup2.default,
-					null,
+					{ id: 'deviceList' },
 					this.props.list.map(function (val, i) {
 						return _react2.default.createElement(
 							_ListGroupItem2.default,
-							{ key: i, onClick: function onClick() {
+							{ className: 'deviceItem', key: i },
+							val,
+							_react2.default.createElement(_Glyphicon2.default, {
+								className: 'btn-call pull-right',
+								glyph: 'earphone',
+								onClick: function onClick() {
 									_this2.clickToCall(val);
-								} },
-							val
+								}
+							})
 						);
 					})
 				);
@@ -33251,6 +33296,46 @@
 /* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(409);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(367)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(true) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept(409, function() {
+				var newContent = __webpack_require__(409);
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 409 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(366)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#deviceList .deviceItem:hover .btn-call {\n\tcolor: green;\n\tcursor: pointer;\n}", "", {"version":3,"sources":["/./static/css/deviceList.css"],"names":[],"mappings":"AAAA;CACC,aAAa;CACb,gBAAgB;CAChB","file":"deviceList.css","sourcesContent":["#deviceList .deviceItem:hover .btn-call {\n\tcolor: green;\n\tcursor: pointer;\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 410 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -33297,11 +33382,11 @@
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
-	var _Alert = __webpack_require__(409);
+	var _Alert = __webpack_require__(411);
 	
 	var _Alert2 = _interopRequireDefault(_Alert);
 	
-	__webpack_require__(410);
+	__webpack_require__(412);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33420,7 +33505,7 @@
 	exports.default = Device;
 
 /***/ },
-/* 409 */
+/* 411 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33528,46 +33613,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 410 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(411);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(367)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(true) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept(411, function() {
-				var newContent = __webpack_require__(411);
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 411 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(366)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "#alert-deviceID {\n\ttext-align: center;\n\tmargin-top: 50px;\n}\n#alert-deviceID #idWrap {\n\tfont-size: 18px;\n\tcolor: blue;\n}\n#streamWrap.live {\n\tposition: absolute;\n\ttop: 2%;\n\tleft: 2%;\n\twidth: 96%;\n    height: 96%;\n    z-index: 2;\n    margin-left: 0 !important;\n}\n#streamWrap video {\n\theight: 99%;\n\twidth: 100%;\n\tobject-fit: fill;\n}", "", {"version":3,"sources":["/./static/css/device.css"],"names":[],"mappings":"AAAA;CACC,mBAAmB;CACnB,iBAAiB;CACjB;AACD;CACC,gBAAgB;CAChB,YAAY;CACZ;AACD;CACC,mBAAmB;CACnB,QAAQ;CACR,SAAS;CACT,WAAW;IACR,YAAY;IACZ,WAAW;IACX,0BAA0B;CAC7B;AACD;CACC,YAAY;CACZ,YAAY;CACZ,iBAAiB;CACjB","file":"device.css","sourcesContent":["#alert-deviceID {\n\ttext-align: center;\n\tmargin-top: 50px;\n}\n#alert-deviceID #idWrap {\n\tfont-size: 18px;\n\tcolor: blue;\n}\n#streamWrap.live {\n\tposition: absolute;\n\ttop: 2%;\n\tleft: 2%;\n\twidth: 96%;\n    height: 96%;\n    z-index: 2;\n    margin-left: 0 !important;\n}\n#streamWrap video {\n\theight: 99%;\n\twidth: 100%;\n\tobject-fit: fill;\n}"],"sourceRoot":"webpack://"}]);
-	
-	// exports
-
-
-/***/ },
 /* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33595,6 +33640,46 @@
 
 /***/ },
 /* 413 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(366)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#alert-deviceID {\n\ttext-align: center;\n\tmargin-top: 50px;\n}\n#alert-deviceID #idWrap {\n\tfont-size: 18px;\n\tcolor: blue;\n}\n#streamWrap {\n\tdisplay: none\n}\n#streamWrap.live {\n\tdisplay: block;\n\tposition: fixed;\n\ttop: 2%;\n\tleft: 2%;\n\twidth: 96%;\n    height: 96%;\n    z-index: 2;\n    margin-left: 0 !important;\n}\n#streamWrap video {\n\theight: 99%;\n\twidth: 100%;\n\tobject-fit: fill;\n}\n#hangup {\n\tdisplay: inline-block;\n\tposition: fixed;\n\tleft: 50%;\n\tbottom: -444%;\n\tcolor: red;\n\topacity: 0;\n\ttransition: opacity .3s;\n\tz-index: 2;\n\tbackground: #ffffff;\n\tpadding: 10px 13px;\n\tborder-radius: 50px;\n}\n#streamWrap:hover + #hangup {\n\tbottom: 4%;\n\topacity: 0.7;\n}\n#hangup:hover {\n\tbottom: 4%;\n\topacity: 1;\n\tcursor: pointer;\n}", "", {"version":3,"sources":["/./static/css/device.css"],"names":[],"mappings":"AAAA;CACC,mBAAmB;CACnB,iBAAiB;CACjB;AACD;CACC,gBAAgB;CAChB,YAAY;CACZ;AACD;CACC,aAAa;CACb;AACD;CACC,eAAe;CACf,gBAAgB;CAChB,QAAQ;CACR,SAAS;CACT,WAAW;IACR,YAAY;IACZ,WAAW;IACX,0BAA0B;CAC7B;AACD;CACC,YAAY;CACZ,YAAY;CACZ,iBAAiB;CACjB;AACD;CACC,sBAAsB;CACtB,gBAAgB;CAChB,UAAU;CACV,cAAc;CACd,WAAW;CACX,WAAW;CACX,wBAAwB;CACxB,WAAW;CACX,oBAAoB;CACpB,mBAAmB;CACnB,oBAAoB;CACpB;AACD;CACC,WAAW;CACX,aAAa;CACb;AACD;CACC,WAAW;CACX,WAAW;CACX,gBAAgB;CAChB","file":"device.css","sourcesContent":["#alert-deviceID {\n\ttext-align: center;\n\tmargin-top: 50px;\n}\n#alert-deviceID #idWrap {\n\tfont-size: 18px;\n\tcolor: blue;\n}\n#streamWrap {\n\tdisplay: none\n}\n#streamWrap.live {\n\tdisplay: block;\n\tposition: fixed;\n\ttop: 2%;\n\tleft: 2%;\n\twidth: 96%;\n    height: 96%;\n    z-index: 2;\n    margin-left: 0 !important;\n}\n#streamWrap video {\n\theight: 99%;\n\twidth: 100%;\n\tobject-fit: fill;\n}\n#hangup {\n\tdisplay: inline-block;\n\tposition: fixed;\n\tleft: 50%;\n\tbottom: -444%;\n\tcolor: red;\n\topacity: 0;\n\ttransition: opacity .3s;\n\tz-index: 2;\n\tbackground: #ffffff;\n\tpadding: 10px 13px;\n\tborder-radius: 50px;\n}\n#streamWrap:hover + #hangup {\n\tbottom: 4%;\n\topacity: 0.7;\n}\n#hangup:hover {\n\tbottom: 4%;\n\topacity: 1;\n\tcursor: pointer;\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 414 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(415);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(367)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(true) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept(415, function() {
+				var newContent = __webpack_require__(415);
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(366)();
