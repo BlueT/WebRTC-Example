@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
@@ -99,6 +100,12 @@ export default class Index extends React.Component {
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={8} mdOffset={2}></Col>
+					<div id="hangup">
+						<Glyphicon 
+							className="btn-hangup" 
+							glyph="phone-alt"
+						/>
+					</div>
 				</Row>
 			</div>
 		)
