@@ -17,49 +17,68 @@ export default class Device extends React.Component {
 	}
 	componentDidMount() {
 		var _this = this;
-		localStorage.webrtcExample = localStorage.webrtcExample || JSON.stringify(Math.floor(Math.random()*1000));
+
+		// set WebRTC info
+		window.connection = new RTCMultiConnection();
+		connection.socketURL = 'http://src.imoncloud.com:38200/';
+		connection.socketMessageEvent = 'audio-video-file-chat-demo';
+
+		localStorage.webrtcExample = localStorage.webrtcExample || connection.token();
 		this.setState({
 			deviceID: localStorage.webrtcExample
 		});
 
-		// set the wetRTC info
-		var phone = window.phone = PHONE({
-			number: localStorage.webrtcExample, // listen on this line
-			publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-			subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-			ssl: true
-		});
+		connection.session = {
+			audio: true,
+			video: true,
+			data: true
+		};
+		connection.sdpConstraints.mandatory = {
+			OfferToReceiveAudio: true,
+			OfferToReceiveVideo: true
+		};
+		connection.videosContainer = document.getElementById('streamWrap');
+		connection.maxParticipantsAllowed = 1;
 
-		phone.ready(() => {
-			// Ready To Call
-			console.log('Phone ready.');
-			this.setState({
-				phoneStatus: 'Ready'
-			});
-		});
-
-		phone.receive(function(session){
-			session.connected(connected);
-			session.ended(ended);
-		});
-
-		function connected(session) {
+		connection.onstream = function(event) {
+			if(event.type != 'local') {
+				console.log('connection onstream.');
+				connection.videosContainer.appendChild(event.mediaElement);
+				event.mediaElement.play();
+				setTimeout(function() {
+					event.mediaElement.play();
+				}, 5000);
+				_this.setState({
+					live: true
+				});
+			}
+		};
+		connection.onopen = function() {
+			console.log('connection opened.');
+		}
+		connection.onclose = function() {
+			console.log('connection closed.');
 			_this.setState({
-				live: true
+				live: false
 			});
-			document.getElementById('streamWrap').innerHTML = '';
-			document.getElementById('streamWrap').appendChild(session.video);
-			console.log(`Call from ${session.number}`);
-			console.log(session);
 		}
+		connection.onEntireSessionClosed = function(event) {
+			connection.attachStreams.forEach(function(stream) {
+				stream.stop();
+			});
+			console.log('entire session closed.');
+		};
+		connection.onUserIdAlreadyTaken = function(useridAlreadyTaken, yourNewUserId) {
+			// seems room is already opened
+			connection.join(useridAlreadyTaken);
+		};
 
-		function ended(session) {
-			document.getElementById('streamWrap').innerHTML = '';
-			console.log("Call end.");
-		}
+		// auto join
+		connection.open(localStorage.webrtcExample);
+		console.log(`auto join: ${localStorage.webrtcExample}`);
 	}
 	componentWillUnmount() {
-		window.phone.hangup();
+		connection.close();
 		this.setState({
 			live: false
 		});
