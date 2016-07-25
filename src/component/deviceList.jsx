@@ -11,7 +11,7 @@ export default class DeviceList extends React.Component {
 		this.clickToCall = this.clickToCall.bind(this);
 	}
 	clickToCall(number) {
-		phone.dial(number);
+		connection.join(number);
 	}
 	render() {
 		return (

@@ -11,7 +11,6 @@ export default class Device extends React.Component {
 		super(props);
 		this.state = {
 			deviceID: '( Loading... )', 
-			phoneStatus: 'Pending', 
 			live: false
 		};
 	}
@@ -90,8 +89,7 @@ export default class Device extends React.Component {
 					<Col md={12}>
 						<Alert id="alert-deviceID" bsStyle="info">
 							Welcome!<br />
-							The device ID is <span id="idWrap" >{this.state.deviceID}</span>.<br />
-							Status: {this.state.phoneStatus}
+							The device ID is <span id="idWrap" >{this.state.deviceID}</span>.
 						</Alert>
 					</Col>
 				</Row>

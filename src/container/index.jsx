@@ -23,40 +23,55 @@ export default class Index extends React.Component {
 		}
 
 		var _this = this;
-		var phone = window.phone = PHONE({
-			number: localStorage.webrtcExampleUser, // listen on this line
-			publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-			subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-			ssl: true
-		});
 
-		phone.ready(() => {
-			// Ready To Call
-			console.log('Phone ready.');
-		});
+		// set webrtc 
+		window.connection = new RTCMultiConnection();
+		connection.socketURL = 'http://src.imoncloud.com:38200/';
+		connection.socketMessageEvent = 'audio-video-file-chat-demo';
 
-		phone.receive(function(session){
-			session.connected(connected);
-			session.ended(ended);
-		});
+		connection.session = {
+			audio: true,
+			video: true,
+			data: true
+		};
+		connection.sdpConstraints.mandatory = {
+			OfferToReceiveAudio: true,
+			OfferToReceiveVideo: true
+		};
+		connection.videosContainer = document.getElementById('streamWrap');
 
-		function connected(session) {
-			_this.setState({
-				live: true
-			});
-			document.getElementById('streamWrap').innerHTML = '';
-			document.getElementById('streamWrap').appendChild(session.video);
-			console.log(`Call from ${session.number}`);
-			console.log(session);
+		connection.onstream = function(event) {
+			if(event.type != 'local') {
+				console.log('connection onstream.');
+				connection.videosContainer.appendChild(event.mediaElement);
+				event.mediaElement.play();
+				setTimeout(function() {
+					event.mediaElement.play();
+				}, 5000);
+				_this.setState({
+					live: true
+				});
+			}
+		};
+		connection.onopen = function() {
+			console.log('connection opened.');
 		}
-
-		function ended(session) {
+		connection.onclose = function() {
+			console.log('connection closed.');
 			_this.setState({
 				live: false
 			});
-			document.getElementById('streamWrap').innerHTML = '';
-			console.log("Call end.");
 		}
+		connection.onEntireSessionClosed = function(event) {
+			connection.attachStreams.forEach(function(stream) {
+				stream.stop();
+			});
+			console.log('entire session closed.');
+		};
+		connection.onUserIdAlreadyTaken = function(useridAlreadyTaken, yourNewUserId) {
+			// seems room is already opened
+			connection.join(useridAlreadyTaken);
+		};
 	}
 	getDeviceList() {
 		let user = localStorage.webrtcExampleUser;
@@ -87,7 +102,7 @@ export default class Index extends React.Component {
 		this.getDeviceList();
 	}
 	handleHangup() {
-		phone.hangup();
+		connection.close();
 	}
 	render() {
 		return (
