@@ -74,32 +74,48 @@ export default class Index extends React.Component {
 		};
 	}
 	getDeviceList() {
-		let user = localStorage.webrtcExampleUser;
-		if(!user) {
+		let account = localStorage.webrtcExampleUser;
+		if(!account) {
 			return false;
 		}
-		let deviceList; 
-		if(localStorage.webrtcExampleDeviceList) {
-			if(JSON.parse(localStorage.webrtcExampleDeviceList)[user]) {
-				deviceList = JSON.parse(localStorage.webrtcExampleDeviceList)[user];
-			} else {
-				deviceList = [];
-				localStorage.webrtcExampleDeviceList = JSON.stringify(Object.assign(JSON.parse(localStorage.webrtcExampleDeviceList), {[user]: []}));
+		$.ajax({
+			url: 'http://src.imoncloud.com:38200/event/GET_DEVICES', 
+			type: 'get', 
+			dataType: 'json', 
+			data: {
+				account
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.setState({
+						deviceList: data.P.result.devices.list
+					});
+				}
 			}
-		} else {
-			deviceList = [];
-			localStorage.webrtcExampleDeviceList = JSON.stringify({[user]: []});
-		}
-		this.setState({
-			deviceList
 		});
 		return true;
 	}
-	handleAddDevice(deviceID) {
-		let user = localStorage.webrtcExampleUser;
-		let deviceList = [...JSON.parse(localStorage.webrtcExampleDeviceList)[user], deviceID]
-		localStorage.webrtcExampleDeviceList = JSON.stringify(Object.assign(JSON.parse(localStorage.webrtcExampleDeviceList), {[user]: deviceList}));
-		this.getDeviceList();
+	handleAddDevice(device_id) {
+		let account = localStorage.webrtcExampleUser;
+		$.ajax({
+			url: 'http://src.imoncloud.com:38200/event/ADD_DEVICES', 
+			type: 'post', 
+			dataType: 'json', 
+			data: {
+				account, 
+				device_id
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.getDeviceList();
+				}
+			}, 
+			error: function(jqXHR) {
+				console.log(jqXHR);
+			}
+		})
 	}
 	handleHangup() {
 		connection.close();
