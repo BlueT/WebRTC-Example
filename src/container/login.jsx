@@ -17,11 +17,30 @@ export default class Login extends React.Component {
 		this.handleLogin = this.handleLogin.bind(this);
 	}
 	handleLogin() {
-		var user = ReactDOM.findDOMNode(this.loginUser).value;
-		var pass = ReactDOM.findDOMNode(this.loginPass).value;
-		if(user) {
-			window.localStorage.webrtcExampleUser = user;
-			this.context.router.replace('/');
+		var username = ReactDOM.findDOMNode(this.loginUser).value;
+		var password = ReactDOM.findDOMNode(this.loginPass).value;
+		if(username && password) {
+			$.ajax({
+				url: 'http://src.imoncloud.com:38200/event/drupalLogin', 
+				type: 'post', 
+				dataType: 'json', 
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain: true, 
+				data: {
+					username, 
+					password
+				}, 
+				success: (data) => {
+					if(!data.P.err) {
+						this.context.router.replace('/');					
+					}
+				}, 
+				error: function(jqXHR) {
+					console.log(jqXHR);
+				}
+			});
 		} 
 	}
 	render() {

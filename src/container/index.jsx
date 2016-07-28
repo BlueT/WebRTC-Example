@@ -10,6 +10,7 @@ export default class Index extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			account: window.account || null, 
 			deviceList: [], 
 			live: false
 		}
@@ -18,9 +19,7 @@ export default class Index extends React.Component {
 		this.handleHangup = this.handleHangup.bind(this);
 	}
 	componentDidMount() {
-		if(!this.getDeviceList()) {
-			return;
-		}
+		this.getDeviceList();
 
 		var _this = this;
 
@@ -74,16 +73,12 @@ export default class Index extends React.Component {
 		};
 	}
 	getDeviceList() {
-		let account = localStorage.webrtcExampleUser;
-		if(!account) {
-			return false;
-		}
 		$.ajax({
 			url: 'http://src.imoncloud.com:38200/event/GET_DEVICES', 
 			type: 'get', 
 			dataType: 'json', 
 			data: {
-				account
+				account: this.state.account
 			}, 
 			success: (data) => {
 				console.log(data);
@@ -97,7 +92,7 @@ export default class Index extends React.Component {
 		return true;
 	}
 	handleAddDevice(device_id) {
-		let account = localStorage.webrtcExampleUser;
+		let account = this.state.account;
 		$.ajax({
 			url: 'http://src.imoncloud.com:38200/event/ADD_DEVICES', 
 			type: 'post', 

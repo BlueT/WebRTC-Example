@@ -6,23 +6,34 @@ import Navigation from '../component/navigation';
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			account: window.account || null
+		}
 		this.handleLogout = this.handleLogout.bind(this);
 	}
-	componentWillMount() {
-		if(!localStorage.webrtcExampleUser) {
-			console.log('No login.');
-			this.context.router.replace('/login');
-			return;
-		}
-	}
 	handleLogout() {
-		delete localStorage.webrtcExampleUser;
-		this.context.router.replace('/login');
+		$.ajax({
+			url: 'http://src.imoncloud.com:38200/event/drupalLogout', 
+			type: 'post', 
+			dataType: 'json', 
+			xhrFields: {
+				withCredentials: true
+			},
+			crossDomain: true, 
+			success: (data) => {
+				if(!data.P.err) {
+					this.context.router.replace('/login');
+				}
+			}, 
+			error: (jqXHR) => {
+				console.log(jqXHR)
+			}
+		})
 	}
 	render() {
 		return (
 			<div>
-				<Navigation user={localStorage.webrtcExampleUser} onLogout={this.handleLogout} />
+				<Navigation user={this.state.account} onLogout={this.handleLogout} />
 				<Grid>
 					{this.props.children}
 				</Grid>

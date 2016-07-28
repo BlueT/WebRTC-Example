@@ -14,11 +14,39 @@ import Device from './container/device';
 
 import '../static/css/style.css';
 
+function isLogin(nextState, replace) {
+	$.ajax({
+		url: 'http://src.imoncloud.com:38200/event/isAuth', 
+		type: 'post', 
+		dataType: 'json', 
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true, 
+		async: false, 
+		success: (data) => {
+			console.log(data);
+			if(data.P.err || !data.P.result.login) {
+				replace({
+					pathname: '/login',
+					state: { nextPathname: nextState.location.pathname }
+				})
+			} else {
+				console.log('logged in');
+				window.account = data.P.result.user.account;
+			}
+		}, 
+		error: (jqXHR) => {
+			console.log(jqXHR);
+		}
+	});
+}
+
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/login" component={Login} />
 		<Route path="/device" component={Device} />
-		<Route path="/" component={App}>
+		<Route path="/" component={App} onEnter={isLogin} >
 			<IndexRoute component={Index}/>
 			<Redirect from="*" to="/" />
 		</Route>
