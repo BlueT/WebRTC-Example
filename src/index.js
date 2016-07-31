@@ -14,7 +14,7 @@ import Device from './container/device';
 
 import '../static/css/style.css';
 
-function isLogin(nextState, replace) {
+function isLogin(nextState, replace, callback) {
 	$.ajax({
 		url: 'http://src.imoncloud.com:38200/event/isAuth', 
 		type: 'post', 
@@ -23,7 +23,6 @@ function isLogin(nextState, replace) {
 			withCredentials: true
 		},
 		crossDomain: true, 
-		async: false, 
 		success: (data) => {
 			console.log(data);
 			if(data.P.err || !data.P.result.login) {
@@ -31,9 +30,11 @@ function isLogin(nextState, replace) {
 					pathname: '/login',
 					state: { nextPathname: nextState.location.pathname }
 				})
+				callback();
 			} else {
 				console.log('logged in');
 				window.account = data.P.result.user.account;
+				callback();
 			}
 		}, 
 		error: (jqXHR) => {
