@@ -55,8 +55,9 @@ export default class Device extends React.Component {
 		connection.onopen = function() {
 			console.log('connection opened.');
 		}
-		connection.onclose = function() {
+		connection.onleave = connection.streamended = connection.onclose = function() {
 			console.log('connection closed.');
+			$('#streamWrap').empty();
 			_this.setState({
 				live: false
 			});
