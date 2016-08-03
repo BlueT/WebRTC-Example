@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'react-router/lib/Router';
 import Route from 'react-router/lib/Route';
+import useRouterHistory from 'react-router/lib/useRouterHistory';
+import createHashHistory from 'history/lib/createHashHistory';
 import IndexRoute from 'react-router/lib/IndexRoute';
-import hashHistory from 'react-router/lib/hashHistory';
+// import hashHistory from 'react-router/lib/hashHistory';
 import Redirect from 'react-router/lib/Redirect';
 // import IndexRedirect from 'react-router/lib/IndexRedirect';
 
@@ -42,9 +44,9 @@ function isLogin(nextState, replace, callback) {
 		}
 	});
 }
-
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 ReactDOM.render(
-	<Router history={hashHistory}>
+	<Router history={appHistory}>
 		<Route path="/login" component={Login} />
 		<Route path="/device" component={Device} />
 		<Route path="/" component={App} onEnter={isLogin} >
