@@ -16,6 +16,7 @@ export default class Index extends React.Component {
 		}
 		this.getDeviceList = this.getDeviceList.bind(this);
 		this.handleAddDevice = this.handleAddDevice.bind(this);
+		this.handleDelDevice = this.handleDelDevice.bind(this);
 		this.handleHangup = this.handleHangup.bind(this);
 	}
 	componentDidMount() {
@@ -92,6 +93,25 @@ export default class Index extends React.Component {
 		});
 		return true;
 	}
+	handleDelDevice(device_id) {
+		if(confirm(`確定移除 ${device_id} ?`)) {
+			$.ajax({
+				url: 'http://src.imoncloud.com:38200/event/REMOVE_DEVICES', 
+				type: 'get', 
+				dataType: 'json', 
+				data: {
+					account: this.state.account, 
+					device_id
+				}, 
+				success: (data) => {
+					console.log(data);
+					if(!data.P.err) {
+						this.getDeviceList();
+					}
+				}
+			});
+		}
+	}
 	handleAddDevice(device_id) {
 		let account = this.state.account;
 		$.ajax({
@@ -130,7 +150,7 @@ export default class Index extends React.Component {
 						md={6} 
 						mdOffset={3}
 					>
-						<DeviceList list={this.state.deviceList} />
+						<DeviceList list={this.state.deviceList} onDel={this.handleDelDevice} />
 					</Col>
 				</Row>
 				<Row>
