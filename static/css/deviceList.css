@@ -1,4 +1,24 @@
+#listWrap {
+	padding-top: 20px;
+	max-height: '600px'; 
+	overflow: 'auto';
+}
 #deviceList .deviceItem:hover .btn-call {
 	color: green;
 	cursor: pointer;
+}
+#deviceList .deviceItem:hover .btn-del {
+	opacity: 1
+}
+#deviceList .deviceItem .btn-del {
+	color: white;
+    background: red;
+    border-radius: 10px;
+    font-size: 20px;
+    position: absolute;
+    right: -12px;
+    top: -8px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .3s;
 }

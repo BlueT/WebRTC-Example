@@ -129,7 +129,6 @@ export default class Index extends React.Component {
 						id="listWrap" 
 						md={6} 
 						mdOffset={3}
-						style={{maxHeight: '600px', overflow: 'auto'}}
 					>
 						<DeviceList list={this.state.deviceList} />
 					</Col>

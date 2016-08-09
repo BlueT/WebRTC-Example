@@ -26,6 +26,7 @@ export default class DeviceList extends React.Component {
 									glyph="earphone"
 									onClick={() => {this.clickToCall(val)}}
 								/>
+								<Glyphicon className="btn-del" glyph="remove-circle" />
 							</ListGroupItem>
 						);
 					})
