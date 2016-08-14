@@ -12,7 +12,7 @@ export default class Navigation extends React.Component {
 			<Navbar id="nav">
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="/">WebRTC Example</a>
+						<a href="/">ezCare</a>
 					</Navbar.Brand>
 				</Navbar.Header>
 				<Navbar.Collapse>

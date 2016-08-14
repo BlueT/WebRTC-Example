@@ -48,7 +48,7 @@ export default class Login extends React.Component {
 			<Grid>
 				<Row>
 					<Col md={6} mdOffset={3}>
-						<Panel id="loginWrap" header="WebRTC Example" bsStyle="primary">
+						<Panel id="loginWrap" header="ezCare" bsStyle="primary">
 							<Form horizontal>
 								<FormGroup controlId="formHorizontalUser">
 									<Col sm={12}>
