@@ -3,6 +3,10 @@
 	max-height: '600px'; 
 	overflow: 'auto';
 }
+#deviceList .deviceItem .btn-call {
+	font-size: 18px;
+	top: -10px;
+}
 #deviceList .deviceItem:hover .btn-call {
 	color: green;
 	cursor: pointer;
@@ -21,4 +25,12 @@
     cursor: pointer;
     opacity: 0;
     transition: opacity .3s;
+}
+#deviceList .deviceItem .deviceName {
+	font-size: 18px;
+	font-weight: bold;
+}
+#deviceList .deviceItem .deviceID {
+	font-size: 15px;
+	color: #777;
 }

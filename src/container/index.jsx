@@ -12,7 +12,7 @@ export default class Index extends React.Component {
 		super(props);
 		this.state = {
 			account: window.account || null, 
-			deviceList: [], 
+			deviceList: {}, 
 			live: false
 		}
 		this.getDeviceList = this.getDeviceList.bind(this);
@@ -87,15 +87,15 @@ export default class Index extends React.Component {
 				console.log(data);
 				if(!data.P.err) {
 					this.setState({
-						deviceList: data.P.result.devices.list
+						deviceList: data.P.result.devices
 					});
 				}
 			}
 		});
 		return true;
 	}
-	handleDelDevice(device_id) {
-		if(confirm(`確定移除 ${device_id} ?`)) {
+	handleDelDevice(device_id, device_name) {
+		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
 			$.ajax({
 				url: 'http://src.imoncloud.com:38200/event/REMOVE_DEVICES', 
 				type: 'get', 
@@ -144,11 +144,11 @@ export default class Index extends React.Component {
 				<Row>
 					<Col 
 						id="listWrap" 
-						md={6} 
-						mdOffset={3}
+						md={8} 
+						mdOffset={2}
 					>
 						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
-						<DeviceList list={this.state.deviceList} onDel={this.handleDelDevice} />
+						<DeviceList list={this.state.deviceList.list} name={this.state.deviceList.name} onDel={this.handleDelDevice} />
 					</Col>
 				</Row>
 				<Row>

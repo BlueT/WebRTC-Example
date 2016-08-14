@@ -17,10 +17,11 @@ export default class DeviceList extends React.Component {
 		return (
 			<ListGroup id="deviceList">
 				{
-					this.props.list.map((val, i) => {
+					this.props.list && this.props.list.map((val, i) => {
 						return (
 							<ListGroupItem className="deviceItem" key={i} >
-								{val}
+								<span className="deviceName">{this.props.name[i]}</span><br />
+								<span className="deviceID">{val}</span>
 								<Glyphicon 
 									className="btn-call pull-right" 
 									glyph="earphone"
@@ -29,7 +30,7 @@ export default class DeviceList extends React.Component {
 								<Glyphicon 
 									className="btn-del" 
 									glyph="remove-circle" 
-									onClick={() => {this.props.onDel(val)}}
+									onClick={() => {this.props.onDel(val, this.props.name[i])}}
 								/>
 							</ListGroupItem>
 						);
