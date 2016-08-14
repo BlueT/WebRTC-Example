@@ -1,0 +1,13 @@
+#deviceCreator .btn-newDevice {
+	color: #337ab7;
+	cursor: pointer;
+	font-size: 20px;
+	vertical-align: top;
+	transition: color .2s;
+}
+#deviceCreator .btn-newDevice:hover {
+	color: #286090;
+}
+#modal-addDevice .btn-addDevice {
+	width: 100%;
+}

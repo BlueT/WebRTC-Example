@@ -2,6 +2,7 @@ import React from 'react';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import PageHeader from 'react-bootstrap/lib/PageHeader';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
@@ -112,7 +113,7 @@ export default class Index extends React.Component {
 			});
 		}
 	}
-	handleAddDevice(device_id) {
+	handleAddDevice(device_id, device_name) {
 		let account = this.state.account;
 		$.ajax({
 			url: 'http://src.imoncloud.com:38200/event/ADD_DEVICES', 
@@ -120,7 +121,8 @@ export default class Index extends React.Component {
 			dataType: 'json', 
 			data: {
 				account, 
-				device_id
+				device_id, 
+				device_name
 			}, 
 			success: (data) => {
 				console.log(data);
@@ -140,16 +142,12 @@ export default class Index extends React.Component {
 		return (
 			<div>
 				<Row>
-					<Col md={6} mdOffset={3}>
-						<DeviceCreator onAdd={this.handleAddDevice} />
-					</Col>
-				</Row>
-				<Row>
 					<Col 
 						id="listWrap" 
 						md={6} 
 						mdOffset={3}
 					>
+						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
 						<DeviceList list={this.state.deviceList} onDel={this.handleDelDevice} />
 					</Col>
 				</Row>
