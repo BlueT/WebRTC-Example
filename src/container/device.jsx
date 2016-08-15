@@ -31,9 +31,9 @@ export default class Device extends React.Component {
 		connection.socketURL = 'http://src.imoncloud.com:38200/';
 		connection.socketMessageEvent = 'audio-video-file-chat-demo';
 
-		localStorage.webrtcExample = localStorage.webrtcExample || connection.token();
+		localStorage.ezCareDeviceID = localStorage.ezCareDeviceID || connection.token();
 		this.setState({
-			deviceID: localStorage.webrtcExample
+			deviceID: localStorage.ezCareDeviceID
 		}, this.getDeviceList);
 
 		connection.session = {
@@ -83,8 +83,8 @@ export default class Device extends React.Component {
 		};
 
 		// auto join
-		connection.open(localStorage.webrtcExample);
-		console.log(`auto join: ${localStorage.webrtcExample}`);
+		connection.open(localStorage.ezCareDeviceID);
+		console.log(`auto join: ${localStorage.ezCareDeviceID}`);
 	}
 	componentWillUnmount() {
 		connection.close();

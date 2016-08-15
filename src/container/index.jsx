@@ -74,6 +74,8 @@ export default class Index extends React.Component {
 			// seems room is already opened
 			connection.join(useridAlreadyTaken);
 		};
+		connection.open(this.state.account);
+		console.log(`auto join: ${this.state.account}`);
 	}
 	getDeviceList() {
 		$.ajax({
