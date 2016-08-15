@@ -1,10 +1,10 @@
 #alert-deviceID {
-	text-align: center;
 	margin-top: 50px;
 }
 #alert-deviceID #idWrap {
-	font-size: 18px;
-	color: blue;
+	font-size: 45px;
+	font-weight: bold;
+	color: #f44336;
 }
 #streamWrap {
 	display: none

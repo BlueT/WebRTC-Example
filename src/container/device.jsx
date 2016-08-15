@@ -2,7 +2,12 @@ import React from 'react';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import Alert from 'react-bootstrap/lib/Alert';
+import Jumbotron from 'react-bootstrap/lib/Jumbotron';
+import PageHeader from 'react-bootstrap/lib/PageHeader';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+
+import DeviceCreator from '../component/deviceCreator';
+import DeviceList from '../component/deviceList';
 
 import '../../static/css/device.css';
 
@@ -11,8 +16,12 @@ export default class Device extends React.Component {
 		super(props);
 		this.state = {
 			deviceID: '( Loading... )', 
-			live: false
+			live: false, 
+			deviceList: {}
 		};
+		this.getDeviceList = this.getDeviceList.bind(this);
+		this.handleAddDevice = this.handleAddDevice.bind(this);
+		this.handleDelDevice = this.handleDelDevice.bind(this);
 	}
 	componentDidMount() {
 		var _this = this;
@@ -25,7 +34,7 @@ export default class Device extends React.Component {
 		localStorage.webrtcExample = localStorage.webrtcExample || connection.token();
 		this.setState({
 			deviceID: localStorage.webrtcExample
-		});
+		}, this.getDeviceList);
 
 		connection.session = {
 			audio: true,
@@ -83,19 +92,93 @@ export default class Device extends React.Component {
 			live: false
 		});
 	}
+	getDeviceList() {
+		$.ajax({
+			url: 'http://src.imoncloud.com:38200/event/GET_DEVICES', 
+			type: 'get', 
+			dataType: 'json', 
+			data: {
+				account: this.state.deviceID
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.setState({
+						deviceList: data.P.result.devices
+					});
+				}
+			}
+		});
+	}
+	handleAddDevice(device_id, device_name) {
+		let account = this.state.deviceID;
+		$.ajax({
+			url: 'http://src.imoncloud.com:38200/event/ADD_DEVICES', 
+			type: 'post', 
+			dataType: 'json', 
+			data: {
+				account, 
+				device_id, 
+				device_name
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.getDeviceList();
+				}
+			}, 
+			error: function(jqXHR) {
+				console.log(jqXHR);
+			}
+		})
+	}
+	handleDelDevice(device_id, device_name) {
+		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
+			$.ajax({
+				url: 'http://src.imoncloud.com:38200/event/REMOVE_DEVICES', 
+				type: 'get', 
+				dataType: 'json', 
+				data: {
+					account: this.state.deviceID, 
+					device_id
+				}, 
+				success: (data) => {
+					console.log(data);
+					if(!data.P.err) {
+						this.getDeviceList();
+					}
+				}
+			});
+		}
+	}
+	handleHangup() {
+		connection.close();
+	}
 	render() {
 		return (
 			<Grid>
 				<Row>
-					<Col md={12}>
-						<Alert id="alert-deviceID" bsStyle="info">
-							Welcome!<br />
-							The device ID is <span id="idWrap" >{this.state.deviceID}</span>.
-						</Alert>
+					<Col md={6}>
+						<Jumbotron id="alert-deviceID">
+							<span style={{fontSize: '25px'}}>歡迎使用 </span>
+							<b style={{fontSize: '35px'}}>ezCare</b><br />
+							<span style={{fontSize: '25px'}}>您的裝置編號為</span><br />
+							<span id="idWrap" >{this.state.deviceID}</span>
+						</Jumbotron>
+					</Col>
+					<Col md={6}>
+						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
+						<DeviceList list={this.state.deviceList.list} name={this.state.deviceList.name} onDel={this.handleDelDevice} />
 					</Col>
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={12}></Col>
+					<div id="hangup" onClick={this.handleHangup}>
+						<Glyphicon 
+							className="btn-hangup" 
+							glyph="phone-alt"
+						/>
+					</div>
 				</Row>
 			</Grid>
 		)
