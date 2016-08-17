@@ -32,10 +32,36 @@ export default class Device extends React.Component {
 		connection.socketMessageEvent = 'audio-video-file-chat-demo';
 
 		localStorage.ezCareDeviceID = localStorage.ezCareDeviceID || connection.token();
+		this.getNumID(localStorage.ezCareDeviceID)
+			.done((data) => {
+				if(!data.P.err) {
+					this.setState({
+						deviceID: data.P.result.device_id
+					}, this.getDeviceList);
+					this.setWebRTC();
+				}
+			})
+			.fail((jqXHR) => {
+				console.log(jqXHR);
+			});
+	}
+	componentWillUnmount() {
+		connection.close();
 		this.setState({
-			deviceID: localStorage.ezCareDeviceID
-		}, this.getDeviceList);
-
+			live: false
+		});
+	}
+	getNumID(HW_id) {
+		return $.ajax({
+			url: 'http://src.imoncloud.com:38200/event/REGISTER_DEVICE', 
+			type: 'post', 
+			dataType: 'json', 
+			data: {
+				HW_id
+			}
+		});
+	}
+	setWebRTC() {
 		connection.session = {
 			audio: true,
 			video: true,
@@ -85,12 +111,6 @@ export default class Device extends React.Component {
 		// auto join
 		connection.open(localStorage.ezCareDeviceID);
 		console.log(`auto join: ${localStorage.ezCareDeviceID}`);
-	}
-	componentWillUnmount() {
-		connection.close();
-		this.setState({
-			live: false
-		});
 	}
 	getDeviceList() {
 		$.ajax({
