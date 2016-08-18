@@ -62,6 +62,7 @@ export default class Device extends React.Component {
 		});
 	}
 	setWebRTC() {
+		let _this = this;
 		connection.session = {
 			audio: true,
 			video: true,
@@ -109,8 +110,8 @@ export default class Device extends React.Component {
 		};
 
 		// auto join
-		connection.open(localStorage.ezCareDeviceID);
-		console.log(`auto join: ${localStorage.ezCareDeviceID}`);
+		connection.open(this.state.deviceID);
+		console.log(`auto join: ${this.state.deviceID}`);
 	}
 	getDeviceList() {
 		$.ajax({
