@@ -42,17 +42,18 @@ export default class Index extends React.Component {
 		connection.videosContainer = document.getElementById('streamWrap');
 
 		connection.onstream = function(event) {
-			if(event.type != 'local') {
-				console.log('connection onstream.');
+			if(event.type == 'local') {
+				$('#streamWrap-local').append(event.mediaElement);
+			} else {
 				connection.videosContainer.appendChild(event.mediaElement);
-				event.mediaElement.play();
-				setTimeout(function() {
-					event.mediaElement.play();
-				}, 5000);
 				_this.setState({
 					live: true
 				});
 			}
+			event.mediaElement.play();
+			setTimeout(function() {
+				event.mediaElement.play();
+			}, 5000);
 		};
 		connection.onopen = function() {
 			console.log('connection opened.');
@@ -155,6 +156,7 @@ export default class Index extends React.Component {
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={8} mdOffset={2}></Col>
+					<Col id="streamWrap-local" className={this.state.live ? 'live' : ''} md={12}></Col>
 					<div id="hangup" onClick={this.handleHangup}>
 						<Glyphicon 
 							className="btn-hangup" 

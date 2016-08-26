@@ -76,22 +76,26 @@ export default class Device extends React.Component {
 		connection.maxParticipantsAllowed = 1;
 
 		connection.onstream = function(event) {
-			if(event.type != 'local') {
-				console.log('connection onstream.');
+			console.info(event);
+			console.log('connection onstream.');
+			if(event.type == 'local') {
+				$('#streamWrap-local').append(event.mediaElement);
+			} else {
 				connection.videosContainer.appendChild(event.mediaElement);
-				event.mediaElement.play();
-				setTimeout(function() {
-					event.mediaElement.play();
-				}, 5000);
 				_this.setState({
 					live: true
 				});
 			}
+			event.mediaElement.play();
+			setTimeout(function() {
+				event.mediaElement.play();
+			}, 5000);
 		};
 		connection.onopen = function() {
 			console.log('connection opened.');
 		}
-		connection.onleave = connection.streamended = connection.onclose = function() {
+		connection.onleave = connection.streamended = connection.onclose = function(e) {
+			console.log(e);
 			console.log('connection closed.');
 			$('#streamWrap').empty();
 			_this.setState({
@@ -194,6 +198,7 @@ export default class Device extends React.Component {
 				</Row>
 				<Row>
 					<Col id="streamWrap" className={this.state.live ? 'live' : ''} md={12}></Col>
+					<Col id="streamWrap-local" className={this.state.live ? 'live' : ''} md={12}></Col>
 					<div id="hangup" onClick={this.handleHangup}>
 						<Glyphicon 
 							className="btn-hangup" 
