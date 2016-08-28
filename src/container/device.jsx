@@ -11,6 +11,10 @@ import DeviceList from '../component/deviceList';
 
 import '../../static/css/device.css';
 
+import hotkey from 'react-hotkey';
+import hotkeyHandler from '../../static/js/hotkeyHandler'; 
+hotkey.activate();
+
 export default class Device extends React.Component {
 	constructor(props) {
 		super(props);
@@ -22,6 +26,7 @@ export default class Device extends React.Component {
 		this.getDeviceList = this.getDeviceList.bind(this);
 		this.handleAddDevice = this.handleAddDevice.bind(this);
 		this.handleDelDevice = this.handleDelDevice.bind(this);
+		this.handleHotkey = this.handleHotkey.bind(this);
 	}
 	componentDidMount() {
 		var _this = this;
@@ -44,12 +49,14 @@ export default class Device extends React.Component {
 			.fail((jqXHR) => {
 				console.log(jqXHR);
 			});
+		hotkey.addHandler(this.handleHotkey);
 	}
 	componentWillUnmount() {
 		connection.close();
 		this.setState({
 			live: false
 		});
+		hotkey.removeHandler(this.handleHotkey);
 	}
 	getNumID(HW_id) {
 		return $.ajax({
@@ -178,6 +185,12 @@ export default class Device extends React.Component {
 	}
 	handleHangup() {
 		connection.close();
+	}
+	handleHotkey(e) {
+		const eventMap = {
+			107: hotkeyHandler.toAddNewContact.bind(this)
+		}
+		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}
 	render() {
 		return (
