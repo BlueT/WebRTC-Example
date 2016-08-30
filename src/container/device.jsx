@@ -206,7 +206,12 @@ export default class Device extends React.Component {
 					</Col>
 					<Col md={6}>
 						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
-						<DeviceList list={this.state.deviceList.list} name={this.state.deviceList.name} onDel={this.handleDelDevice} />
+						<DeviceList 
+							list={this.state.deviceList.list} 
+							name={this.state.deviceList.name} 
+							mode="device"
+							onDel={this.handleDelDevice}
+						/>
 					</Col>
 				</Row>
 				<Row>

@@ -1,8 +1,10 @@
 const hotkeyHandler = {
 	toAddNewContact() {
-		console.log('Hotkey + triggered.');
-		$('.btn-newDevice').click();
-		$('#newID').focus();
+		if(!this.state.live) {
+			console.log('Hotkey + triggered.');
+			$('.btn-newDevice').click();
+			$('#newID').focus();
+		}
 	}
 }
 

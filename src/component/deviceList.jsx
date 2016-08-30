@@ -19,15 +19,23 @@ export default class DeviceList extends React.Component {
 			<ListGroup id="deviceList">
 				{
 					this.props.list && this.props.list.map((val, i) => {
+						let callIcon = this.props.mode == 'device' ? (
+							<span className="btn-call device pull-right" onClick={() => {this.clickToCall(val)}}>
+								<Glyphicon glyph="earphone"/>
+								<span className="btn-call-num">{+i+1}</span>
+							</span>
+						) : (
+							<Glyphicon 
+								className="btn-call pull-right" 
+								glyph="earphone"
+								onClick={() => {this.clickToCall(val)}}
+							/>
+						);
 						return (
 							<ListGroupItem className="deviceItem" key={i} >
 								<span className="deviceName">{this.props.name[i]}</span><br />
 								<span className="deviceID">{val}</span>
-								<Glyphicon 
-									className="btn-call pull-right" 
-									glyph="earphone"
-									onClick={() => {this.clickToCall(val)}}
-								/>
+								{callIcon}
 								<Glyphicon 
 									className="btn-del" 
 									glyph="remove-circle" 

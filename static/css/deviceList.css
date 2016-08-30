@@ -7,9 +7,17 @@
 	font-size: 18px;
 	top: -10px;
 }
+#deviceList .deviceItem .btn-call.device {
+	top: -25px !important;
+	position: relative !important;
+}
 #deviceList .deviceItem:hover .btn-call {
 	color: green;
 	cursor: pointer;
+}
+#deviceList .deviceItem .btn-call .btn-call-num {
+	font-size: 46px;
+	font-weight: bolder;
 }
 #deviceList .deviceItem:hover .btn-del {
 	opacity: 1
