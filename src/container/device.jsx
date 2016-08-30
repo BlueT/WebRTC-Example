@@ -189,6 +189,16 @@ export default class Device extends React.Component {
 	handleHotkey(e) {
 		const eventMap = {
 			107: hotkeyHandler.toAddNewContact.bind(this), // +
+			97: hotkeyHandler.call.bind(this, 0), // 1
+			98: hotkeyHandler.call.bind(this, 1), // 2
+			99: hotkeyHandler.call.bind(this, 2), // 3
+			100: hotkeyHandler.call.bind(this, 3), // 4
+			101: hotkeyHandler.call.bind(this, 4), // 5
+			102: hotkeyHandler.call.bind(this, 5), // 6
+			103: hotkeyHandler.call.bind(this, 6), // 7
+			104: hotkeyHandler.call.bind(this, 7), // 8
+			105: hotkeyHandler.call.bind(this, 8), // 9
+			110: hotkeyHandler.hangup.bind(this) // Del
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}
