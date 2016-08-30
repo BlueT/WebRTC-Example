@@ -60,7 +60,12 @@ export default class DeviceCreator extends React.Component {
 									裝置 ID
 								</Col>
 								<Col sm={9}>
-									<FormControl type="text" placeholder="裝置 ID" ref={ref => this.newDeviceID = ref} />
+									<FormControl 
+										type="text" 
+										placeholder="裝置 ID" 
+										ref={ref => this.newDeviceID = ref}
+										onKeyPress={this.handleClick}
+									/>
 								</Col>
 							</FormGroup>
 							<FormGroup controlId="newName">
@@ -68,7 +73,12 @@ export default class DeviceCreator extends React.Component {
 									聯絡人名稱
 								</Col>
 								<Col sm={9}>
-									<FormControl type="text" placeholder="聯絡人名稱" ref={ref => this.newDeviceName = ref} />
+									<FormControl 
+										type="text"
+										placeholder="聯絡人名稱" 
+										ref={ref => this.newDeviceName = ref}
+										onKeyPress={this.handleClick}
+									/>
 								</Col>
 							</FormGroup>
 							<FormGroup>

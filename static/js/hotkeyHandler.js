@@ -3,9 +3,6 @@ const hotkeyHandler = {
 		console.log('Hotkey + triggered.');
 		$('.btn-newDevice').click();
 		$('#newID').focus();
-	},
-	createNewContact() {
-		alert('createNewContact');
 	}
 }
 

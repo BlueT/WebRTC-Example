@@ -188,7 +188,7 @@ export default class Device extends React.Component {
 	}
 	handleHotkey(e) {
 		const eventMap = {
-			107: hotkeyHandler.toAddNewContact.bind(this)
+			107: hotkeyHandler.toAddNewContact.bind(this), // +
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}
