@@ -1,0 +1,14 @@
+.deviceEditer .btn-edit {
+	font-size: 12px;
+	position: absolute;
+	right: 50px;
+	top: 28px;
+	cursor: pointer;
+	display: none;
+}
+.deviceItem:hover .btn-edit {
+	display: inline-block;
+}
+.deviceEditer .btn-edit:hover {
+	color: #337ab7;
+}

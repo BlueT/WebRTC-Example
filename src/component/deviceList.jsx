@@ -3,6 +3,8 @@ import ListGroup from 'react-bootstrap/lib/ListGroup';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
+import DeviceEditer from './deviceEditer';
+
 import '../../static/css/deviceList.css';
 
 export default class DeviceList extends React.Component {
@@ -35,6 +37,7 @@ export default class DeviceList extends React.Component {
 							<ListGroupItem className="deviceItem" key={i} >
 								<span className="deviceName">{this.props.name[i]}</span><br />
 								<span className="deviceID">{val}</span>
+								{(this.props.mode == 'remote') && (<DeviceEditer deviceID={val} deviceName={this.props.name[i]} />)}
 								{callIcon}
 								<Glyphicon 
 									className="btn-del" 
