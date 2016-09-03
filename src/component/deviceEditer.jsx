@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
@@ -13,21 +14,48 @@ export default class DeviceEditer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			modalOpened: false
+			modalOpened: false, 
+			orderList: []
 		};
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 	openModal() {
-		// get list then open modal
-		this.setState({
-			modalOpened: true
-		})
+		$.ajax({
+			url: '../../static/json/getOrderList.json', 
+			type: 'get', 
+			dataType: 'json', 
+			success: (data) => {
+				this.setState({
+					modalOpened: true
+				}, () => {
+					for(var i = 0; i < 3; i++) {
+						if(data.list[i] != undefined) {
+							ReactDOM.findDOMNode(this[`order${(+i+1).toString()}`]).value = data.list[i].id;
+						}
+					}
+				});
+			}, 
+			error: (jqXHR) => {
+				console.log(jqXHR);
+			}
+		});
 	}
 	closeModal() {
 		this.setState({
 			modalOpened: false
 		})
+	}
+	handleClick() {
+		var order = [];
+		for(var i = 0; i < 3; i++) {
+			var val = ReactDOM.findDOMNode(this[`order${(+i+1).toString()}`]).value;
+			if(val != '') {
+				order = [...order, val];
+			}
+		}
+		alert(order);
 	}
 	render() {
 		return (
@@ -77,7 +105,7 @@ export default class DeviceEditer extends React.Component {
 							</FormGroup>
 							<FormGroup>
 								<Col sm={12}>
-									<Button className="btn-addDevice pull-right" bsStyle="primary" onClick={this.handleClick}>完成</Button>
+									<Button className="btn-editDevice pull-right" bsStyle="primary" onClick={this.handleClick}>完成</Button>
 								</Col>
 							</FormGroup>
 						</Form>
