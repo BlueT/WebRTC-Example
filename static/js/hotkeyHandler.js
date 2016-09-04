@@ -8,7 +8,7 @@ const hotkeyHandler = {
 	}, 
 	call(index) {
 		if(this.state.deviceList.list[index] && !this.state.live && $('#modal-addDevice').size() == 0) {
-			connection.join(this.state.deviceList.list[index]);
+			this.callTo(this.state.deviceList.list[index]);
 		}
 	}, 
 	hangup() {
@@ -22,7 +22,7 @@ const hotkeyHandler = {
 			type: 'get', 
 			dataType: 'json', 
 			success: (data) => {
-				whoToCall(data.list);
+				whoToCall(this, data.list);
 			}, 
 			error: (jqXHR) => {
 				console.log(jqXHR);
@@ -30,14 +30,18 @@ const hotkeyHandler = {
 		})
 	}
 }
-function whoToCall(list, order = 0) {
+function whoToCall(_this, list, order = 0) {
 	if(list[order]) {
 		connection.checkPresence(list[order].id, function(exist, id) {
 			if(exist) {
 				connection.join(id);
 				console.log(`join the order ${order}, and the id is ${id}`);
 			} else {
-				whoToCall(list, +order+1);
+				whoToCall(_this, list, +order+1);
+				_this.msg.show(`${id} 不在線上`, {
+					time: 3000,
+					type: 'info'
+				});
 				console.log(id+' no exist');
 			}
 		});

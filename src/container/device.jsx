@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import AlertContainer from 'react-alert';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
@@ -27,6 +28,14 @@ export default class Device extends React.Component {
 		this.handleAddDevice = this.handleAddDevice.bind(this);
 		this.handleDelDevice = this.handleDelDevice.bind(this);
 		this.handleHotkey = this.handleHotkey.bind(this);
+		this.callTo = this.callTo.bind(this);
+
+		this.alertOptions = {
+			position: 'bottom right',
+			theme: 'dark',
+			time: 3000,
+			transition: 'scale'
+		};
 	}
 	componentDidMount() {
 		var _this = this;
@@ -186,6 +195,20 @@ export default class Device extends React.Component {
 	handleHangup() {
 		connection.close();
 	}
+	callTo(number) {
+		console.log(`calling ${number}`);
+		connection.checkPresence(number, (exist, id) => {
+			if(exist) {
+				connection.join(id);
+			} else {
+				this.msg.show(`${id} 不在線上`, {
+					time: 3000,
+					type: 'info'
+				});
+				console.log(id+' no exist');
+			}
+		});
+	}
 	handleHotkey(e) {
 		const eventMap = {
 			107: hotkeyHandler.toAddNewContact.bind(this), // +
@@ -222,7 +245,9 @@ export default class Device extends React.Component {
 							name={this.state.deviceList.name} 
 							mode="device"
 							onDel={this.handleDelDevice}
+							onCall={this.callTo}
 						/>
+						<AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
 					</Col>
 				</Row>
 				<Row>

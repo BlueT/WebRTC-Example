@@ -10,11 +10,6 @@ import '../../static/css/deviceList.css';
 export default class DeviceList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.clickToCall = this.clickToCall.bind(this);
-	}
-	clickToCall(number) {
-		console.log(`calling ${number}`);
-		connection.join(number);
 	}
 	render() {
 		return (
@@ -22,7 +17,7 @@ export default class DeviceList extends React.Component {
 				{
 					this.props.list && this.props.list.map((val, i) => {
 						let callIcon = this.props.mode == 'device' ? (
-							<span className="btn-call device pull-right" onClick={() => {this.clickToCall(val)}}>
+							<span className="btn-call device pull-right" onClick={() => {this.props.onCall(val)}}>
 								<Glyphicon glyph="earphone"/>
 								<span className="btn-call-num">{+i+1}</span>
 							</span>
@@ -30,7 +25,7 @@ export default class DeviceList extends React.Component {
 							<Glyphicon 
 								className="btn-call pull-right" 
 								glyph="earphone"
-								onClick={() => {this.clickToCall(val)}}
+								onClick={() => {this.props.onCall(val)}}
 							/>
 						);
 						return (

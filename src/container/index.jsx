@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
+import AlertContainer from 'react-alert';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
@@ -19,6 +20,14 @@ export default class Index extends React.Component {
 		this.handleAddDevice = this.handleAddDevice.bind(this);
 		this.handleDelDevice = this.handleDelDevice.bind(this);
 		this.handleHangup = this.handleHangup.bind(this);
+		this.callTo = this.callTo.bind(this);
+
+		this.alertOptions = {
+			position: 'bottom right',
+			theme: 'dark',
+			time: 3000,
+			transition: 'scale'
+		};
 	}
 	componentDidMount() {
 		this.getDeviceList();
@@ -138,6 +147,20 @@ export default class Index extends React.Component {
 			}
 		})
 	}
+	callTo(number) {
+		console.log(`calling ${number}`);
+		connection.checkPresence(number, (exist, id) => {
+			if(exist) {
+				connection.join(id);
+			} else {
+				this.msg.show(`${id} 不在線上`, {
+					time: 3000,
+					type: 'info'
+				});
+				console.log(id+' no exist');
+			}
+		});
+	}
 	handleHangup() {
 		connection.close();
 	}
@@ -156,7 +179,9 @@ export default class Index extends React.Component {
 							name={this.state.deviceList.name} 
 							mode="remote"
 							onDel={this.handleDelDevice} 
+							onCall={this.callTo}
 						/>
+						<AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
 					</Col>
 				</Row>
 				<Row>

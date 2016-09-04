@@ -16,6 +16,8 @@
     "history": "2.0.1",
     "moment": "^2.14.1",
     "react": "15.0.1",
+    "react-addons-css-transition-group": "^15.3.1",
+    "react-alert": "^1.0.14",
     "react-bootstrap": "^0.29.5",
     "react-dom": "15.0.1",
     "react-hotkey": "^0.6.0",
