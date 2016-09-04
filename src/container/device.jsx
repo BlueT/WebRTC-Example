@@ -33,7 +33,7 @@ export default class Device extends React.Component {
 
 		// set WebRTC info
 		window.connection = new RTCMultiConnection();
-		connection.socketURL = 'http://src.imoncloud.com:38200/';
+		connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 		connection.socketMessageEvent = 'audio-video-file-chat-demo';
 
 		localStorage.ezCareDeviceID = localStorage.ezCareDeviceID || connection.token();
@@ -198,7 +198,8 @@ export default class Device extends React.Component {
 			103: hotkeyHandler.call.bind(this, 6), // 7
 			104: hotkeyHandler.call.bind(this, 7), // 8
 			105: hotkeyHandler.call.bind(this, 8), // 9
-			110: hotkeyHandler.hangup.bind(this) // Del
+			110: hotkeyHandler.hangup.bind(this), // Del
+			106: hotkeyHandler.urgentCall.bind(this) // *
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}

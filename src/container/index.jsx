@@ -27,7 +27,7 @@ export default class Index extends React.Component {
 
 		// set webrtc 
 		window.connection = new RTCMultiConnection();
-		connection.socketURL = 'http://src.imoncloud.com:38200/';
+		connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 		connection.socketMessageEvent = 'audio-video-file-chat-demo';
 
 		connection.session = {
