@@ -69,7 +69,7 @@ export default class Device extends React.Component {
 	}
 	getNumID(HW_id) {
 		return $.ajax({
-			url: 'http://src.imoncloud.com:38200/event/REGISTER_DEVICE', 
+			url: 'https://ezcare.info:38201/event/REGISTER_DEVICE', 
 			type: 'post', 
 			dataType: 'json', 
 			data: {
@@ -135,7 +135,7 @@ export default class Device extends React.Component {
 	}
 	getDeviceList() {
 		$.ajax({
-			url: 'http://src.imoncloud.com:38200/event/GET_DEVICES', 
+			url: 'https://ezcare.info:38201/event/GET_DEVICES', 
 			type: 'get', 
 			dataType: 'json', 
 			data: {
@@ -154,7 +154,7 @@ export default class Device extends React.Component {
 	handleAddDevice(device_id, device_name) {
 		let account = this.state.deviceID;
 		$.ajax({
-			url: 'http://src.imoncloud.com:38200/event/ADD_DEVICES', 
+			url: 'https://ezcare.info:38201/event/ADD_DEVICE', 
 			type: 'post', 
 			dataType: 'json', 
 			data: {
@@ -176,7 +176,7 @@ export default class Device extends React.Component {
 	handleDelDevice(device_id, device_name) {
 		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
 			$.ajax({
-				url: 'http://src.imoncloud.com:38200/event/REMOVE_DEVICES', 
+				url: 'https://ezcare.info:38201/event/REMOVE_DEVICES', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {

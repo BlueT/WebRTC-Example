@@ -18,7 +18,7 @@ import '../static/css/style.css';
 
 function isLogin(nextState, replace, callback) {
 	$.ajax({
-		url: 'http://src.imoncloud.com:38200/event/isAuth', 
+		url: 'https://ezcare.info:38201/event/isAuth', 
 		type: 'post', 
 		dataType: 'json', 
 		xhrFields: {

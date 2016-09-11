@@ -21,7 +21,7 @@ export default class Login extends React.Component {
 		var password = ReactDOM.findDOMNode(this.loginPass).value;
 		if(username && password) {
 			$.ajax({
-				url: 'http://src.imoncloud.com:38200/event/drupalLogin', 
+				url: 'https://ezcare.info:38201/event/drupalLogin', 
 				type: 'post', 
 				dataType: 'json', 
 				xhrFields: {

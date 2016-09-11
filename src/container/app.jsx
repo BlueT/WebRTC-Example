@@ -13,7 +13,7 @@ export default class App extends React.Component {
 	}
 	handleLogout() {
 		$.ajax({
-			url: 'http://src.imoncloud.com:38200/event/drupalLogout', 
+			url: 'https://ezcare.info:38201/event/drupalLogout', 
 			type: 'post', 
 			dataType: 'json', 
 			xhrFields: {
