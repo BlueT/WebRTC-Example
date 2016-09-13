@@ -7,8 +7,9 @@ const hotkeyHandler = {
 		}
 	}, 
 	call(index) {
-		if(this.state.deviceList.list[index] && !this.state.live && $('#modal-addDevice').size() == 0) {
-			this.callTo(this.state.deviceList.list[index]);
+		var deviceIDs = Object.keys(this.state.deviceList);
+		if(deviceIDs.length > index && !this.state.live && $('#modal-addDevice').size() == 0) {
+			this.callTo(deviceIDs[index]);
 		}
 	}, 
 	hangup() {

@@ -240,9 +240,8 @@ export default class Device extends React.Component {
 					</Col>
 					<Col md={6}>
 						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
-						<DeviceList 
-							list={this.state.deviceList.list} 
-							name={this.state.deviceList.name} 
+						<DeviceList  
+							devices={this.state.deviceList}
 							mode="device"
 							onDel={this.handleDelDevice}
 							onCall={this.callTo}

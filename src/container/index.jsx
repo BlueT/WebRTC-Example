@@ -175,8 +175,7 @@ export default class Index extends React.Component {
 					>
 						<PageHeader>通訊錄 <DeviceCreator onAdd={this.handleAddDevice} /></PageHeader>
 						<DeviceList 
-							list={this.state.deviceList.list} 
-							name={this.state.deviceList.name} 
+							devices={this.state.deviceList} 
 							mode="remote"
 							onDel={this.handleDelDevice} 
 							onCall={this.callTo}
