@@ -55,15 +55,39 @@ export default class AccountSetting extends React.Component {
 					<Modal.Body>
 						<Panel header="轉接設定">
 							<Form horizontal>
-								<FormGroup controlId="connectTo">
+								<FormGroup controlId="order1">
 									<Col sm={3}>
-										帳號
+										第一順位
 									</Col>
 									<Col sm={9}>
 										<FormControl 
 											type="text" 
-											placeholder="轉接帳號" 
-											ref={ref => this.connectTo = ref}
+											placeholder="第一順位" 
+											ref={ref => this.order1 = ref}
+										/>
+									</Col>
+								</FormGroup>
+								<FormGroup controlId="order2">
+									<Col sm={3}>
+										第二順位
+									</Col>
+									<Col sm={9}>
+										<FormControl 
+											type="text" 
+											placeholder="第二順位" 
+											ref={ref => this.order2 = ref}
+										/>
+									</Col>
+								</FormGroup>
+								<FormGroup controlId="order3">
+									<Col sm={3}>
+										第三順位
+									</Col>
+									<Col sm={9}>
+										<FormControl 
+											type="text" 
+											placeholder="第三順位" 
+											ref={ref => this.order3 = ref}
 										/>
 									</Col>
 								</FormGroup>
