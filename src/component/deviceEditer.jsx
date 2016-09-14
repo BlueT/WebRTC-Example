@@ -51,14 +51,34 @@ export default class DeviceEditer extends React.Component {
 		})
 	}
 	handleClick() {
-		var order = [];
-		for(var i = 0; i < 3; i++) {
-			var val = ReactDOM.findDOMNode(this[`order${(+i+1).toString()}`]).value;
-			if(val != '') {
-				order = [...order, val];
+		var list = [];
+		for(var i = 1; i <= 3; i++) {
+			var target = ReactDOM.findDOMNode(this[`order${i}`]).value;
+			if(target) {
+				list = [...list, {target}];
 			}
 		}
-		alert(order);
+		// console.log(list);
+		$.ajax({
+			url: 'https://ezcare.info:38201/event/SET_CALLLIST', 
+			type: 'get', 
+			dataType: 'json', 
+			data: {
+				_data: JSON.stringify({
+					id: this.props.deviceID,
+					list
+				})
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.closeModal();
+				}
+			}, 
+			error: (jqXHR) => {
+				console.log(jqXHR);
+			}
+		})
 	}
 	render() {
 		return (
