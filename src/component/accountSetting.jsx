@@ -49,7 +49,34 @@ export default class AccountSetting extends React.Component {
 		});
 	}
 	handleClick() {
-		alert(ReactDOM.findDOMNode(this.connectTo).value);
+		var list = [];
+		for(var i = 1; i <= 3; i++) {
+			var target = ReactDOM.findDOMNode(this[`contactOrder${i}`]).value;
+			if(target) {
+				list = [...list, {target}];
+			}
+		}
+		// console.log(list);
+		$.ajax({
+			url: 'https://ezcare.info:38201/event/SET_CALLLIST', 
+			type: 'get', 
+			dataType: 'json', 
+			data: {
+				_data: JSON.stringify({
+					id: this.props.user,
+					list
+				})
+			}, 
+			success: (data) => {
+				console.log(data);
+				if(!data.P.err) {
+					this.closeModal();
+				}
+			}, 
+			error: (jqXHR) => {
+				console.log(jqXHR);
+			}
+		})
 	}
 	render() {
 		return (
@@ -69,7 +96,7 @@ export default class AccountSetting extends React.Component {
 									<Col sm={9}>
 										<FormControl 
 											type="text" 
-											placeholder="第一順位" 
+											placeholder="帳號" 
 											ref={ref => this.contactOrder1 = ref}
 										/>
 									</Col>
@@ -81,7 +108,7 @@ export default class AccountSetting extends React.Component {
 									<Col sm={9}>
 										<FormControl 
 											type="text" 
-											placeholder="第二順位" 
+											placeholder="帳號" 
 											ref={ref => this.contactOrder2 = ref}
 										/>
 									</Col>
@@ -93,7 +120,7 @@ export default class AccountSetting extends React.Component {
 									<Col sm={9}>
 										<FormControl 
 											type="text" 
-											placeholder="第三順位" 
+											placeholder="帳號" 
 											ref={ref => this.contactOrder3 = ref}
 										/>
 									</Col>
