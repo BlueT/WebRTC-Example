@@ -23,19 +23,22 @@ export default class DeviceEditer extends React.Component {
 	}
 	openModal() {
 		$.ajax({
-			url: '../../static/json/getOrderList.json', 
+			url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
 			type: 'get', 
 			dataType: 'json', 
+			data: {
+				id: this.props.deviceID
+			}, 
 			success: (data) => {
-				this.setState({
-					modalOpened: true
-				}, () => {
-					for(var i = 0; i < 3; i++) {
-						if(data.list[i] != undefined) {
-							ReactDOM.findDOMNode(this[`order${(+i+1).toString()}`]).value = data.list[i].id;
-						}
-					}
-				});
+				if(!data.P.err) {
+					this.setState({
+						modalOpened: true
+					}, () => {
+						ReactDOM.findDOMNode(this.order1).value = data.P.result[0] == undefined ? '' : data.P.result[0].target;
+						ReactDOM.findDOMNode(this.order2).value = data.P.result[1] == undefined ? '' : data.P.result[1].target;
+						ReactDOM.findDOMNode(this.order3).value = data.P.result[2] == undefined ? '' : data.P.result[2].target;
+					});
+				}
 			}, 
 			error: (jqXHR) => {
 				console.log(jqXHR);
