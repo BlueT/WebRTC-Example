@@ -197,15 +197,49 @@ export default class Device extends React.Component {
 	}
 	callTo(number) {
 		console.log(`calling ${number}`);
+		if(!(/^[0-9]*$/).test(number)) { // remote
+			if(checkOnline(number)) {
+				connection.join(number);
+			} else {
+				$.ajax({
+					url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
+					type: 'get', 
+					dataType: 'json', 
+					data: {
+						id: number
+					}, 
+					success: (data) => {
+						if(!data.P.err) {
+							for(var i = 0; i < data.P.result.lenght; i++) {
+								if(checkOnline(data.P.result[i].target)) {
+									connection.join(data.P.result[i].target);
+									break;
+								}
+							}
+						}
+					}, 
+					error: (jqXHR) => {
+						console.log(jqXHR);
+					}
+				});
+			}
+		} else {
+			if(this.checkOnline(number)) {
+				connection.join(number);
+			}
+		}
+	}
+	checkOnline(number) {
 		connection.checkPresence(number, (exist, id) => {
 			if(exist) {
-				connection.join(id);
+				return true;
 			} else {
 				this.msg.show(`${id} 不在線上`, {
 					time: 3000,
 					type: 'info'
 				});
 				console.log(id+' no exist');
+				return false;
 			}
 		});
 	}
