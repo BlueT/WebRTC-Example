@@ -256,7 +256,7 @@ export default class Device extends React.Component {
 			104: hotkeyHandler.call.bind(this, 7), // 8
 			105: hotkeyHandler.call.bind(this, 8), // 9
 			110: hotkeyHandler.hangup.bind(this), // Del
-			106: hotkeyHandler.urgentCall.bind(this) // *
+			106: hotkeyHandler.urgentCall.bind(this, this.state.deviceID) // *
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}

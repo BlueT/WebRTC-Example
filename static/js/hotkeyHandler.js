@@ -17,23 +17,28 @@ const hotkeyHandler = {
 			connection.close();
 		}
 	}, 
-	urgentCall() {
+	urgentCall(id) {
 		$.ajax({
-			url: '../../static/json/getOrderList.json', 
+			url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
 			type: 'get', 
 			dataType: 'json', 
+			data: {
+				id
+			}, 
 			success: (data) => {
-				whoToCall(this, data.list);
+				if(!data.P.err) {
+					whoToCall(this, data.P.result);
+				}
 			}, 
 			error: (jqXHR) => {
 				console.log(jqXHR);
 			}
-		})
+		});
 	}
 }
 function whoToCall(_this, list, order = 0) {
 	if(list[order]) {
-		connection.checkPresence(list[order].id, function(exist, id) {
+		connection.checkPresence(list[order].target, function(exist, id) {
 			if(exist) {
 				connection.join(id);
 				console.log(`join the order ${order}, and the id is ${id}`);
