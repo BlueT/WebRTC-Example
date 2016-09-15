@@ -2,22 +2,48 @@ const hotkeyHandler = {
 	toAddNewContact() {
 		if(!this.state.live) {
 			console.log('Hotkey + triggered.');
+			$('.deviceItem').removeClass('selected');
 			$('.btn-newDevice').click();
 			$('#newID').focus();
 		}
 	}, 
-	call(index) {
+	select(index) {
 		var deviceIDs = Object.keys(this.state.deviceList);
 		if(deviceIDs.length > index && !this.state.live && $('#modal-addDevice').size() == 0) {
-			this.callTo(deviceIDs[index]);
+			$('.deviceItem').removeClass('selected');
+			$(`.deviceItem:eq(${index})`).addClass('selected');
 		}
 	}, 
-	hangup() {
+	call() {
+		if(!this.state.live && $('#modal-addDevice').size() == 0 && $('.deviceItem.selected').size() == 1) {
+			this.callTo($('.deviceItem.selected .deviceID').text());
+		}
+	}, 
+	del() {
 		if(this.state.live) {
+			$('.deviceItem').removeClass('selected');
 			connection.close();
+		} else if($('.deviceItem.selected').size() == 1) {
+			$.ajax({
+				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
+				type: 'get', 
+				dataType: 'json', 
+				data: {
+					account: this.state.deviceID, 
+					device_id: $('.deviceItem.selected .deviceID').text()
+				}, 
+				success: (data) => {
+					console.log(data);
+					if(!data.P.err) {
+						$('.deviceItem').removeClass('selected');
+						this.getDeviceList();
+					}
+				}
+			});
 		}
 	}, 
 	urgentCall(id) {
+		$('.deviceItem').removeClass('selected');
 		$.ajax({
 			url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
 			type: 'get', 
@@ -27,28 +53,11 @@ const hotkeyHandler = {
 			}, 
 			success: (data) => {
 				if(!data.P.err) {
-					whoToCall(this, data.P.result);
+					this.whoToCall(data.P.result);
 				}
 			}, 
 			error: (jqXHR) => {
 				console.log(jqXHR);
-			}
-		});
-	}
-}
-function whoToCall(_this, list, order = 0) {
-	if(list[order]) {
-		connection.checkPresence(list[order].target, function(exist, id) {
-			if(exist) {
-				connection.join(id);
-				console.log(`join the order ${order}, and the id is ${id}`);
-			} else {
-				whoToCall(_this, list, +order+1);
-				_this.msg.show(`${id} 不在線上`, {
-					time: 3000,
-					type: 'info'
-				});
-				console.log(id+' no exist');
 			}
 		});
 	}

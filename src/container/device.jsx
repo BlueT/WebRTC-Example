@@ -29,6 +29,7 @@ export default class Device extends React.Component {
 		this.handleDelDevice = this.handleDelDevice.bind(this);
 		this.handleHotkey = this.handleHotkey.bind(this);
 		this.callTo = this.callTo.bind(this);
+		this.whoToCall = this.whoToCall.bind(this);
 
 		this.alertOptions = {
 			position: 'bottom right',
@@ -176,7 +177,7 @@ export default class Device extends React.Component {
 	handleDelDevice(device_id, device_name) {
 		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
 			$.ajax({
-				url: 'https://ezcare.info:38201/event/REMOVE_DEVICES', 
+				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {
@@ -198,65 +199,68 @@ export default class Device extends React.Component {
 	callTo(number) {
 		console.log(`calling ${number}`);
 		if(!(/^[0-9]*$/).test(number)) { // remote
-			if(checkOnline(number)) {
-				connection.join(number);
-			} else {
-				$.ajax({
-					url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
-					type: 'get', 
-					dataType: 'json', 
-					data: {
-						id: number
-					}, 
-					success: (data) => {
-						if(!data.P.err) {
-							for(var i = 0; i < data.P.result.lenght; i++) {
-								if(checkOnline(data.P.result[i].target)) {
-									connection.join(data.P.result[i].target);
-									break;
-								}
-							}
-						}
-					}, 
-					error: (jqXHR) => {
-						console.log(jqXHR);
+			$.ajax({
+				url: 'https://ezcare.info:38201/event/GET_CALLLIST', 
+				type: 'get', 
+				dataType: 'json', 
+				data: {
+					id: number
+				}, 
+				success: (data) => {
+					if(!data.P.err) {
+						this.whoToCall([{target: number}, ...data.P.result]);
 					}
-				});
-			}
+				}, 
+				error: (jqXHR) => {
+					console.log(jqXHR);
+				}
+			});
 		} else {
-			if(this.checkOnline(number)) {
-				connection.join(number);
-			}
+			connection.checkPresence(number, (exist, id) => {
+				if(exist) {
+					connection.join(id);
+				} else {
+					this.msg.show(`${id} 不在線上`, {
+						time: 3000,
+						type: 'info'
+					});
+					console.log(id+' no exist');
+				}
+			});
 		}
 	}
-	checkOnline(number) {
-		connection.checkPresence(number, (exist, id) => {
-			if(exist) {
-				return true;
-			} else {
-				this.msg.show(`${id} 不在線上`, {
-					time: 3000,
-					type: 'info'
-				});
-				console.log(id+' no exist');
-				return false;
-			}
-		});
+	whoToCall(list, order = 0) {
+		if(list[order]) {
+			connection.checkPresence(list[order].target, (exist, id) => {
+				if(exist) {
+					connection.join(id);
+					console.log(`join the order ${order}, and the id is ${id}`);
+				} else {
+					this.whoToCall(list, +order+1);
+					this.msg.show(`${id} 不在線上`, {
+						time: 3000,
+						type: 'info'
+					});
+					console.log(id+' no exist');
+				}
+			});
+		}
 	}
 	handleHotkey(e) {
 		const eventMap = {
 			107: hotkeyHandler.toAddNewContact.bind(this), // +
-			97: hotkeyHandler.call.bind(this, 0), // 1
-			98: hotkeyHandler.call.bind(this, 1), // 2
-			99: hotkeyHandler.call.bind(this, 2), // 3
-			100: hotkeyHandler.call.bind(this, 3), // 4
-			101: hotkeyHandler.call.bind(this, 4), // 5
-			102: hotkeyHandler.call.bind(this, 5), // 6
-			103: hotkeyHandler.call.bind(this, 6), // 7
-			104: hotkeyHandler.call.bind(this, 7), // 8
-			105: hotkeyHandler.call.bind(this, 8), // 9
-			110: hotkeyHandler.hangup.bind(this), // Del
-			106: hotkeyHandler.urgentCall.bind(this, this.state.deviceID) // *
+			97: hotkeyHandler.select.bind(this, 0), // 1
+			98: hotkeyHandler.select.bind(this, 1), // 2
+			99: hotkeyHandler.select.bind(this, 2), // 3
+			100: hotkeyHandler.select.bind(this, 3), // 4
+			101: hotkeyHandler.select.bind(this, 4), // 5
+			102: hotkeyHandler.select.bind(this, 5), // 6
+			103: hotkeyHandler.select.bind(this, 6), // 7
+			104: hotkeyHandler.select.bind(this, 7), // 8
+			105: hotkeyHandler.select.bind(this, 8), // 9
+			110: hotkeyHandler.del.bind(this), // Del
+			106: hotkeyHandler.urgentCall.bind(this, this.state.deviceID), // *
+			13: hotkeyHandler.call.bind(this) // Enter
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
 	}

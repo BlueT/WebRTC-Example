@@ -11,6 +11,9 @@
 	top: -25px !important;
 	position: relative !important;
 }
+#deviceList .deviceItem.selected {
+	background: #FFEB3B;
+}
 #deviceList .deviceItem:hover .btn-call {
 	color: green;
 	cursor: pointer;

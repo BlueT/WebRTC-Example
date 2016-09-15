@@ -41,7 +41,7 @@ export default class DeviceList extends React.Component {
 								<Glyphicon 
 									className="btn-del" 
 									glyph="remove-circle" 
-									onClick={() => {this.props.onDel(deviceID, this.props.name[i])}}
+									onClick={() => {this.props.onDel(deviceID, this.props.devices[deviceID].name)}}
 								/>
 							</ListGroupItem>
 						);
