@@ -153,6 +153,13 @@ export default class Device extends React.Component {
 		});
 	}
 	handleAddDevice(device_id, device_name) {
+		if($('.deviceItem').size() >= 9) {
+			this.msg.show('聯絡人數量已達上限', {
+				time: 3000,
+				type: 'info'
+			});
+			return;
+		}
 		let account = this.state.deviceID;
 		$.ajax({
 			url: 'https://ezcare.info:38201/event/ADD_DEVICE', 
