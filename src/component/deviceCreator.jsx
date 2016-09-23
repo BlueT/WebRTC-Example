@@ -21,7 +21,10 @@ export default class DeviceCreator extends React.Component {
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 	}
-	handleClick() {
+	handleClick(e) {
+		if(e.keyCode && e.keyCode != 13) {
+			return;
+		}
 		var id = ReactDOM.findDOMNode(this.newDeviceID).value;
 		var name = ReactDOM.findDOMNode(this.newDeviceName).value;
 		if(id) {
@@ -64,7 +67,7 @@ export default class DeviceCreator extends React.Component {
 										type="text" 
 										placeholder="裝置 ID" 
 										ref={ref => this.newDeviceID = ref}
-										onKeyPress={this.handleClick}
+										onKeyDown={this.handleClick}
 									/>
 								</Col>
 							</FormGroup>
@@ -77,7 +80,7 @@ export default class DeviceCreator extends React.Component {
 										type="text"
 										placeholder="聯絡人名稱" 
 										ref={ref => this.newDeviceName = ref}
-										onKeyPress={this.handleClick}
+										onKeyDown={this.handleClick}
 									/>
 								</Col>
 							</FormGroup>
