@@ -80,6 +80,15 @@ export default class Device extends React.Component {
 	}
 	setWebRTC() {
 		let _this = this;
+		connection.mediaConstraints = {
+			video: {
+			    mandatory: {
+			        maxWidth: 120,
+			        maxHeight: 80
+			    },
+			    optional: []
+			}
+		};
 		connection.session = {
 			audio: true,
 			video: true,
