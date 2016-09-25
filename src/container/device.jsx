@@ -80,15 +80,15 @@ export default class Device extends React.Component {
 	}
 	setWebRTC() {
 		let _this = this;
-		connection.mediaConstraints = {
-			video: {
-			    mandatory: {
-			        maxWidth: 120,
-			        maxHeight: 80
-			    },
-			    optional: []
-			}
-		};
+		// connection.mediaConstraints = {
+		// 	video: {
+		// 		mandatory: {
+		// 			maxWidth: 120,
+		// 			maxHeight: 80
+		// 		},
+		// 		optional: []
+		// 	}
+		// };
 		connection.session = {
 			audio: true,
 			video: true,
@@ -107,6 +107,8 @@ export default class Device extends React.Component {
 			if(event.type == 'local') {
 				$('#streamWrap-local').append(event.mediaElement);
 			} else {
+				var remoteUser = _this.state.deviceList[event.userid] ? _this.state.deviceList[event.userid].name : event.userid;
+				$('#remoteUser').text(remoteUser);
 				connection.videosContainer.appendChild(event.mediaElement);
 				_this.setState({
 					live: true
@@ -312,6 +314,7 @@ export default class Device extends React.Component {
 							glyph="phone-alt"
 						/>
 					</div>
+					<div id="remoteUser" className={this.state.live ? 'live' : ''}></div>
 				</Row>
 			</Grid>
 		)

@@ -61,3 +61,20 @@
 	opacity: 1;
 	cursor: pointer;
 }
+#remoteUser {
+	position: absolute;
+	top: 4%;
+	right: 8%;
+	z-index: 3;
+	display: none;
+	font-size: 30px;
+	font-weight: bold;
+	color: #f3f3f3;
+	background: rgba(0,150,136,0.6);
+	border-radius: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#remoteUser.live {
+	display: inline-block;
+}

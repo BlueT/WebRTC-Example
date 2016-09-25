@@ -54,6 +54,8 @@ export default class Index extends React.Component {
 			if(event.type == 'local') {
 				$('#streamWrap-local').append(event.mediaElement);
 			} else {
+				var remoteUser = _this.state.deviceList[event.userid] ? _this.state.deviceList[event.userid].name : event.userid;
+				$('#remoteUser').text(remoteUser);
 				connection.videosContainer.appendChild(event.mediaElement);
 				_this.setState({
 					live: true
@@ -109,7 +111,7 @@ export default class Index extends React.Component {
 	handleDelDevice(device_id, device_name) {
 		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
 			$.ajax({
-				url: 'https://ezcare.info:38201/event/REMOVE_DEVICES', 
+				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {
@@ -192,6 +194,7 @@ export default class Index extends React.Component {
 							glyph="phone-alt"
 						/>
 					</div>
+					<div id="remoteUser" className={this.state.live ? 'live' : ''}></div>
 				</Row>
 			</div>
 		)
