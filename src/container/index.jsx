@@ -91,32 +91,32 @@ export default class Index extends React.Component {
 	}
 	getDeviceList() {
 		$.ajax({
-			url: 'https://ezcare.info:38201/event/GET_DEVICES', 
+			url: 'https://ezcare.info:38201/event/GET_CONTACTS', 
 			type: 'get', 
 			dataType: 'json', 
 			data: {
-				account: this.state.account
+				self: this.state.account
 			}, 
 			success: (data) => {
 				console.log(data);
 				if(!data.P.err) {
 					this.setState({
-						deviceList: data.P.result.devices
+						deviceList: data.P.result
 					});
 				}
 			}
 		});
 		return true;
 	}
-	handleDelDevice(device_id, device_name) {
-		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
+	handleDelDevice(target, device_name) {
+		if(confirm(`確定移除 ${device_name}(${target}) ?`)) {
 			$.ajax({
-				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
+				url: 'https://ezcare.info:38201/event/REMOVE_CONTACT', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {
-					account: this.state.account, 
-					device_id
+					self: this.state.account, 
+					target
 				}, 
 				success: (data) => {
 					console.log(data);
@@ -127,16 +127,16 @@ export default class Index extends React.Component {
 			});
 		}
 	}
-	handleAddDevice(device_id, device_name) {
-		let account = this.state.account;
+	handleAddDevice(target, name) {
+		let self = this.state.account;
 		$.ajax({
-			url: 'https://ezcare.info:38201/event/ADD_DEVICE', 
+			url: 'https://ezcare.info:38201/event/ADD_CONTACT', 
 			type: 'post', 
 			dataType: 'json', 
 			data: {
-				account, 
-				device_id, 
-				device_name
+				self, 
+				target, 
+				name
 			}, 
 			success: (data) => {
 				console.log(data);

@@ -25,12 +25,12 @@ const hotkeyHandler = {
 			connection.close();
 		} else if($('.deviceItem.selected').size() == 1) {
 			$.ajax({
-				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
+				url: 'https://ezcare.info:38201/event/REMOVE_CONTACT', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {
-					account: this.state.deviceID, 
-					device_id: $('.deviceItem.selected .deviceID').text()
+					self: this.state.deviceID, 
+					target: $('.deviceItem.selected .deviceID').text()
 				}, 
 				success: (data) => {
 					console.log(data);

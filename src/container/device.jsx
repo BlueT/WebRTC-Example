@@ -148,23 +148,23 @@ export default class Device extends React.Component {
 	}
 	getDeviceList() {
 		$.ajax({
-			url: 'https://ezcare.info:38201/event/GET_DEVICES', 
+			url: 'https://ezcare.info:38201/event/GET_CONTACTS', 
 			type: 'get', 
 			dataType: 'json', 
 			data: {
-				account: this.state.deviceID
+				self: this.state.deviceID
 			}, 
 			success: (data) => {
 				console.log(data);
 				if(!data.P.err) {
 					this.setState({
-						deviceList: data.P.result.devices
+						deviceList: data.P.result
 					});
 				}
 			}
 		});
 	}
-	handleAddDevice(device_id, device_name) {
+	handleAddDevice(target, name) {
 		if($('.deviceItem').size() >= 9) {
 			this.msg.show('聯絡人數量已達上限', {
 				time: 3000,
@@ -172,15 +172,15 @@ export default class Device extends React.Component {
 			});
 			return;
 		}
-		let account = this.state.deviceID;
+		let self = this.state.deviceID;
 		$.ajax({
-			url: 'https://ezcare.info:38201/event/ADD_DEVICE', 
+			url: 'https://ezcare.info:38201/event/ADD_CONTACT', 
 			type: 'post', 
 			dataType: 'json', 
 			data: {
-				account, 
-				device_id, 
-				device_name
+				self, 
+				target, 
+				name
 			}, 
 			success: (data) => {
 				console.log(data);
@@ -193,15 +193,15 @@ export default class Device extends React.Component {
 			}
 		})
 	}
-	handleDelDevice(device_id, device_name) {
-		if(confirm(`確定移除 ${device_name}(${device_id}) ?`)) {
+	handleDelDevice(target, device_name) {
+		if(confirm(`確定移除 ${device_name}(${target}) ?`)) {
 			$.ajax({
-				url: 'https://ezcare.info:38201/event/REMOVE_DEVICE', 
+				url: 'https://ezcare.info:38201/event/REMOVE_CONTACT', 
 				type: 'get', 
 				dataType: 'json', 
 				data: {
-					account: this.state.deviceID, 
-					device_id
+					self: this.state.deviceID, 
+					target
 				}, 
 				success: (data) => {
 					console.log(data);
