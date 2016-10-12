@@ -7,6 +7,7 @@ import AlertContainer from 'react-alert';
 
 import DeviceCreator from '../component/deviceCreator';
 import DeviceList from '../component/deviceList';
+import Ring from '../component/ring';
 
 export default class Index extends React.Component {
 	constructor(props) {
@@ -14,7 +15,8 @@ export default class Index extends React.Component {
 		this.state = {
 			account: window.account || null, 
 			deviceList: {}, 
-			live: false
+			live: false, 
+			onCalled: false
 		}
 		this.getDeviceList = this.getDeviceList.bind(this);
 		this.handleAddDevice = this.handleAddDevice.bind(this);
@@ -28,10 +30,12 @@ export default class Index extends React.Component {
 			time: 3000,
 			transition: 'scale'
 		};
+		this.setWebRTC();
 	}
 	componentDidMount() {
 		this.getDeviceList();
-
+	}
+	setWebRTC() {
 		var _this = this;
 
 		// set webrtc 
@@ -183,6 +187,7 @@ export default class Index extends React.Component {
 							onCall={this.callTo}
 						/>
 						<AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+						<Ring connection={window.connection} deviceList={this.state.deviceList}/>
 					</Col>
 				</Row>
 				<Row>

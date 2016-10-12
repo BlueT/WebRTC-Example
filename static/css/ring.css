@@ -1,0 +1,29 @@
+#modal-ring .btn-answer, 
+#modal-ring .btn-decline {
+	padding: 20px;
+	border-radius: 40px;
+	cursor: pointer;
+	transition: all .2s;
+	color: #f3f3f3;
+}
+#modal-ring .btn-answer:hover, 
+#modal-ring .btn-decline:hover {
+	padding: 25px;
+	box-shadow: 0 0 5px #000;
+}
+#modal-ring .btn-answer:hover{
+	background: #69d46d;
+}
+#modal-ring .btn-decline:hover{
+	background: #ff5d52;
+}
+#modal-ring .btn-answer {
+	background: #4caf50
+}
+#modal-ring .btn-decline {
+	background: #f44336
+}
+#modal-ring .deviceID {
+	font-size: 70px;
+    font-weight: bold;
+}
