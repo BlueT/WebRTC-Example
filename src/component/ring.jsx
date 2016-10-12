@@ -17,18 +17,32 @@ export default class Ring extends React.Component {
 			modalOpened: false
 		}
 		this.closeModal = this.closeModal.bind(this);
+		this.handleDecline = this.handleDecline.bind(this);
+		this.handleAnswer = this.handleAnswer.bind(this);
 	}
 	componentDidMount() {
 		// on called
 		this.props.connection.onNewParticipant = (participantId, userPreferences) => {
 			this.setState({
 				modalOpened: true, 
-				participantId
+				participantId, 
+				userPreferences
 			});
-			// connection.acceptParticipationRequest(participantId, userPreferences);
 		};
 	}
 	closeModal() {
+		this.setState({
+			modalOpened: false
+		});
+	}
+	handleDecline() {
+		this.props.connection.disconnectWith(this.state.participantId);
+		this.setState({
+			modalOpened: false
+		});
+	}
+	handleAnswer() {
+		this.props.connection.acceptParticipationRequest(this.state.participantId, this.state.userPreferences);
 		this.setState({
 			modalOpened: false
 		});
@@ -41,7 +55,7 @@ export default class Ring extends React.Component {
 				<Modal.Body>
 					<Row style={{height: '100px', lineHeight: '100px', textAlign: 'center'}}>
 						<Col sm={3}>
-							<span className="btn-answer">
+							<span className="btn-answer" onClick={this.handleAnswer}>
 								<Glyphicon glyph="earphone"/>
 							</span>
 						</Col>
@@ -49,7 +63,7 @@ export default class Ring extends React.Component {
 							<span className="deviceID">{deviceID}</span>
 						</Col>
 						<Col sm={3}>
-							<span className="btn-decline">
+							<span className="btn-decline" onClick={this.handleDecline}>
 								<Glyphicon glyph="phone-alt"/>
 							</span>
 						</Col>

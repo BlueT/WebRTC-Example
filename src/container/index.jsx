@@ -52,7 +52,7 @@ export default class Index extends React.Component {
 			OfferToReceiveAudio: true,
 			OfferToReceiveVideo: true
 		};
-		connection.videosContainer = document.getElementById('streamWrap');
+		// connection.videosContainer = document.getElementById('streamWrap');
 
 		connection.onstream = function(event) {
 			if(event.type == 'local') {
@@ -60,7 +60,7 @@ export default class Index extends React.Component {
 			} else {
 				var remoteUser = _this.state.deviceList[event.userid] ? _this.state.deviceList[event.userid].name : event.userid;
 				$('#remoteUser').text(remoteUser);
-				connection.videosContainer.appendChild(event.mediaElement);
+				document.getElementById('streamWrap').appendChild(event.mediaElement);
 				_this.setState({
 					live: true
 				});
