@@ -13,6 +13,7 @@ import '../../static/css/ring.css';
 export default class Ring extends React.Component {
 	constructor(props) {
 		super(props);
+		this.callTimeout = 0;
 		this.state = {
 			modalOpened: false
 		}
@@ -28,6 +29,9 @@ export default class Ring extends React.Component {
 				participantId, 
 				userPreferences
 			});
+			this.callTimeout = setTimeout(() => {
+				this.handleDecline();
+			}, 10*1000);
 		};
 	}
 	closeModal() {
@@ -40,12 +44,14 @@ export default class Ring extends React.Component {
 		this.setState({
 			modalOpened: false
 		});
+		clearTimeout(this.callTimeout);
 	}
 	handleAnswer() {
 		this.props.connection.acceptParticipationRequest(this.state.participantId, this.state.userPreferences);
 		this.setState({
 			modalOpened: false
 		});
+		clearTimeout(this.callTimeout);
 	}
 	render() {
 		var deviceID = this.state.participantId;

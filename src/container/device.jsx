@@ -31,6 +31,7 @@ export default class Device extends React.Component {
 		this.callTo = this.callTo.bind(this);
 		this.whoToCall = this.whoToCall.bind(this);
 
+		this.callTimeout = 0;
 		this.alertOptions = {
 			position: 'bottom right',
 			theme: 'dark',
@@ -105,6 +106,7 @@ export default class Device extends React.Component {
 		connection.onstream = function(event) {
 			console.info(event);
 			console.log('connection onstream.');
+			clearTimeout(_this.callTimeout);
 			if(event.type == 'local') {
 				$('#streamWrap-local').append(event.mediaElement);
 			} else {
@@ -253,6 +255,10 @@ export default class Device extends React.Component {
 			connection.checkPresence(list[order].target, (exist, id) => {
 				if(exist) {
 					connection.join(id);
+					this.callTimeout = setTimeout(() => {
+						connection.disconnectWith(id);
+						this.whoToCall(list, +order+1);
+					}, 10*1000);
 					console.log(`join the order ${order}, and the id is ${id}`);
 				} else {
 					this.whoToCall(list, +order+1);
