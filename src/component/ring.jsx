@@ -67,7 +67,7 @@ export default class Ring extends React.Component {
 						</Col>
 						<Col sm={6}>
 							<span className="deviceID">{deviceID}</span>
-							<audio src="../../static/ring.mp3" autoPlay/>
+							<audio src="./static/ring.mp3" autoPlay/>
 						</Col>
 						<Col sm={3}>
 							<span className="btn-decline" onClick={this.handleDecline}>
