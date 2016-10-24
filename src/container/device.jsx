@@ -30,6 +30,7 @@ export default class Device extends React.Component {
 		this.handleHotkey = this.handleHotkey.bind(this);
 		this.callTo = this.callTo.bind(this);
 		this.whoToCall = this.whoToCall.bind(this);
+		this.onEvent = this.onEvent.bind(this);
 
 		this.callTimeout = 0;
 		this.alertOptions = {
@@ -55,6 +56,9 @@ export default class Device extends React.Component {
 						deviceID: data.P.result.device_id
 					}, this.getDeviceList);
 					this.setWebRTC();
+					SR.subscribe(data.P.result.device_id.toString(), 0, (data, ch) => {
+						this.onEvent(data.type, data.data);
+					});
 				}
 			})
 			.fail((jqXHR) => {
@@ -288,6 +292,14 @@ export default class Device extends React.Component {
 			13: hotkeyHandler.call.bind(this) // Enter
 		}
 		eventMap[e.keyCode] && eventMap[e.keyCode]();
+	}
+	onEvent(type, data) {
+		switch(type) {
+			case 'CONTACT_UPDATED': 
+				this.setState({
+					deviceList: data
+				});
+		}
 	}
 	render() {
 		return (

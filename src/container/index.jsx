@@ -23,6 +23,7 @@ export default class Index extends React.Component {
 		this.handleDelDevice = this.handleDelDevice.bind(this);
 		this.handleHangup = this.handleHangup.bind(this);
 		this.callTo = this.callTo.bind(this);
+		this.onEvent = this.onEvent.bind(this);
 
 		this.alertOptions = {
 			position: 'bottom right',
@@ -34,6 +35,9 @@ export default class Index extends React.Component {
 	}
 	componentDidMount() {
 		this.getDeviceList();
+		SR.subscribe(this.state.account.toString(), 0, (data, ch) => {
+			this.onEvent(data.type, data.data);
+		});
 	}
 	setWebRTC() {
 		var _this = this;
@@ -169,6 +173,14 @@ export default class Index extends React.Component {
 	}
 	handleHangup() {
 		connection.close();
+	}
+	onEvent(type, data) {
+		switch(type) {
+			case 'CONTACT_UPDATED': 
+				this.setState({
+					deviceList: data
+				});
+		}
 	}
 	render() {
 		return (
