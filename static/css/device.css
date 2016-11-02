@@ -22,7 +22,18 @@
 #streamWrap video {
 	height: 99%;
 	width: 100%;
-	object-fit: fill;
+	/*object-fit: fill;*/
+}
+#streamWrap:after {
+	content: '';
+	background: #000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+	opacity: 0.8;
 }
 #streamWrap-local.live{
 	z-index: 20;
@@ -37,7 +48,7 @@
 #streamWrap-local video {
 	height: 93%;
 	width: 100%;
-	object-fit: fill;
+	/*object-fit: fill;*/
 }
 #hangup {
 	display: inline-block;

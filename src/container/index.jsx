@@ -60,6 +60,7 @@ export default class Index extends React.Component {
 
 		connection.onstream = function(event) {
 			if(event.type == 'local') {
+				$('#streamWrap-local video').remove();
 				$('#streamWrap-local').append(event.mediaElement);
 			} else {
 				var remoteUser = _this.state.deviceList[event.userid] ? _this.state.deviceList[event.userid].name : event.userid;

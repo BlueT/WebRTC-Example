@@ -112,6 +112,7 @@ export default class Device extends React.Component {
 			console.log('connection onstream.');
 			clearTimeout(_this.callTimeout);
 			if(event.type == 'local') {
+				$('#streamWrap-local video').remove();
 				$('#streamWrap-local').append(event.mediaElement);
 			} else {
 				var remoteUser = _this.state.deviceList[event.userid] ? _this.state.deviceList[event.userid].name : event.userid;
