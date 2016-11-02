@@ -97,6 +97,7 @@ export default class Device extends React.Component {
 				optional: []
 			}
 		};
+		connection.mediaConstraints.audio = true;
 		connection.session = {
 			audio: true,
 			video: true,

@@ -46,7 +46,17 @@ export default class Index extends React.Component {
 		window.connection = new RTCMultiConnection();
 		connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 		connection.socketMessageEvent = 'audio-video-file-chat-demo';
-
+		connection.mediaConstraints = {
+			video: {
+				mandatory: {
+					maxWidth: 320,
+					maxHeight: 240, 
+					maxFrameRate: 15
+				},
+				optional: []
+			}
+		};
+		connection.mediaConstraints.audio = true;
 		connection.session = {
 			audio: true,
 			video: true,
