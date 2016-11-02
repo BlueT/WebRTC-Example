@@ -73,7 +73,7 @@
 	cursor: pointer;
 }
 #remoteUser {
-	position: absolute;
+	position: fixed;
 	top: 4%;
 	right: 8%;
 	z-index: 3;

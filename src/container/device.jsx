@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import Alert from 'react-bootstrap/lib/Alert';
 import AlertContainer from 'react-alert';
 
 import DeviceCreator from '../component/deviceCreator';
@@ -22,6 +23,7 @@ export default class Device extends React.Component {
 		this.state = {
 			deviceID: '( Loading... )', 
 			live: false, 
+			calling: {val: false, target: ''},
 			deviceList: {}
 		};
 		this.getDeviceList = this.getDeviceList.bind(this);
@@ -111,6 +113,9 @@ export default class Device extends React.Component {
 			console.info(event);
 			console.log('connection onstream.');
 			clearTimeout(_this.callTimeout);
+			_this.setState({
+				calling: {val: false, target: ''}
+			});
 			if(event.type == 'local') {
 				$('#streamWrap-local video').remove();
 				$('#streamWrap-local').append(event.mediaElement);
@@ -260,9 +265,20 @@ export default class Device extends React.Component {
 			connection.checkPresence(list[order].target, (exist, id) => {
 				if(exist) {
 					connection.join(id);
+					this.setState({
+						calling: {val: true, target: id}
+					});
 					this.callTimeout = setTimeout(() => {
+						this.setState({
+							calling: {val: false, target: ''}
+						});
 						connection.disconnectWith(id);
 						this.whoToCall(list, +order+1);
+						this.msg.show(`${id} 不在線上`, {
+							time: 3000,
+							type: 'info'
+						});
+						console.log(id+' no exist');
 					}, 10*1000);
 					console.log(`join the order ${order}, and the id is ${id}`);
 				} else {
@@ -335,6 +351,12 @@ export default class Device extends React.Component {
 						/>
 					</div>
 					<div id="remoteUser" className={this.state.live ? 'live' : ''}></div>
+					{ this.state.calling.val &&
+						<Alert bsStyle="warning" style={{textAlign: 'center'}}>
+							正在打給 <strong>{this.state.calling.target}</strong> ...
+							<audio src="./static/ring.mp3" autoPlay/>
+						</Alert>
+					}
 				</Row>
 			</Grid>
 		)
