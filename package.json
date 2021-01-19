@@ -16,7 +16,7 @@
     "moment": "^2.14.1",
     "react": "15.7.0",
     "react-bootstrap": "^0.33.1",
-    "react-dom": "15.7.0",
+    "react-dom": "16.5.0",
     "react-router": "^2.5.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^3.11.0"
