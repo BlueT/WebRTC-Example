@@ -15,11 +15,11 @@
     "classnames": "^2.2.5",
     "moment": "^2.14.1",
     "react": "15.7.0",
-    "react-bootstrap": "^0.29.5",
+    "react-bootstrap": "^0.33.1",
     "react-dom": "15.7.0",
     "react-router": "^2.5.2",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
     "babel-core": "^6.10.4",
